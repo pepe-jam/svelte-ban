@@ -1,0 +1,76 @@
+<script>
+  import "../app.scss";
+  import { page } from "$app/stores";
+
+  console.log($page.route.id);
+
+  const nav = [
+    { title: "Home", path: "/" },
+    { title: "Birthday", path: "/birthday" },
+    { title: "Seed", path: "/seed" },
+    { title: "Price", path: "/price" },
+  ];
+</script>
+
+<nav>
+  {#each nav as item}
+    <a href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
+  {/each}
+</nav>
+
+<slot />
+
+<style lang="scss">
+  nav {
+    font-size: 3vh;
+    text-align: center;
+    user-select: none;
+
+    a:hover {
+      color: $ban-g;
+    }
+
+    a,
+    a:active {
+      color: #fff;
+    }
+
+    a {
+      position: relative;
+      text-decoration: none;
+      margin-right: 0.3em;
+    }
+
+    a::before {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 2px;
+      top: 0;
+      right: 0;
+      background-color: $ban-g;
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    a:hover::before {
+      transition: transform 0.3s ease;
+      transform: scaleX(1);
+    }
+
+    .active{
+      color: $ban-y;
+    }
+    // TODO
+    .active::before {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 3px;
+      transform: scaleX(1);
+      background-color: $ban-y;
+      color: $ban-y;
+    }
+  }
+</style>
