@@ -1,18 +1,16 @@
-<script lang="ts">
-import { Main } from "@bananocoin/bananojs";
+<script lang='ts'>
+import { Main } from '@bananocoin/bananojs';
 import { fade } from 'svelte/transition'
 import { quintIn } from 'svelte/easing';
 
-// good seed: 
-
-let seed: string = ""
+let seed: string = ''
 
 function generateBananoSeed() {
-  seed = ""
+  seed = ''
   const seedBytes = new Uint8Array(32);
   window.crypto.getRandomValues(seedBytes);
   for (const element of seedBytes) {
-    seed += element.toString(16).padStart(2, "0").toUpperCase();
+    seed += element.toString(16).padStart(2, '0').toUpperCase();
   }
   clearAddresses()
   setCurrentPage(1)
@@ -37,11 +35,9 @@ function setCurrentPage(newPage: number) {
 
 async function generateAddresses() {
   for (let i = amount; i < amount + 5; i++) {
-    addresses.push(await Main.getBananoAccountFromSeed(seed, i))
+    addresses = [...addresses, await Main.getBananoAccountFromSeed(seed, i)]
   }
   amount += 5
-  addresses = addresses
-
   // adjust spacing and sizing of whole page (onepage)
 }
 
@@ -55,86 +51,86 @@ function scrollToTop() {
 
 function copySeed() {
   navigator.clipboard.writeText(seed);
-  console.log('alo')
 }
 
 function clearAddresses() {
   addresses = []
 }
-
 </script>
 
-<div class="generator subtitle">
-  <button id="generate" on:click={generateBananoSeed}>Generate 🍌 🌱</button>
+<div class='generator subtitle'>
+  <button id='generate' on:click={generateBananoSeed}>Generate 🍌 🌱</button>
   {#if seed.length === 0}
-  <div id="seed" on:mousedown={copySeed}>Use the button to generate a new banano seed</div>
-  <div id="addresses"/>
+  <div id='seed'>Use the button to generate a new banano seed</div>
+  <div id='addresses'/>
   {:else}
-  <div id="seed">
+  <div id='seed' class='clickable' on:mousedown={copySeed}>
     Your generated seed is<br><span>{seed}</span> 
   </div>
   {#if addresses.length !== 0}
   <h4>and here some of the addresses that belong to it</h4>
-  {#key totalAddresses}
-    <div id='addresses' >
+  {#key currentPage}
+    <div id='addresses'>
     <div id='list'>
+    <div in:fade={{duration: 500, easing: quintIn}}>
     {#each addresses as address, i}
     {#if i >= addrRangeLow && i < addrRangeHigh}
-    <div id='addr' in:fade={{duration: 500, easing: quintIn}} out:fade={{duration: 0}}>
-      <div id="monkey"><a target='_blank' rel="noreferrer" href='https://creeper.banano.cc/account/{address}'>
-          <img  alt="monkey avatar" src='https://monkey.banano.cc/api/v1/monkey/{address}'>
+    <div id='addr'>
+      <div id='monkey'><a target='_blank' rel='noreferrer' href='https://creeper.banano.cc/account/{address}'>
+          <img  alt='monkey avatar' src='https://monkey.banano.cc/api/v1/monkey/{address}'>
         </a></div>
-        <span><a target='_blank' rel="noreferrer" href='https://creeper.banano.cc/account/{address}'>{address}</a></span>
+        <span><a target='_blank' rel='noreferrer' href='https://creeper.banano.cc/account/{address}'>{address}</a></span>
     </div>
     {/if}
     {/each}
   </div>
-  <div id="buttons">
+</div>
+  <div id='buttons'>
     <button on:click={generateAddresses}>i need more</button>
-<!--  -->
-<div id="listnav">
-  <button disabled='{currentPage <= 1}' on:click|preventDefault={() => setCurrentPage(1)}>&lt&lt</button>
-  <button disabled='{currentPage <= 1}' on:click|preventDefault={() => setCurrentPage(currentPage - 1)}>&lt</button>
-  <!-- pages before current -->
-  {#if currentPage != totalPages}
-    {#each [1] as i}
-      {#if currentPage - i > 0}
-      <div><a href="/seed/" on:click|preventDefault={() => setCurrentPage(currentPage - i)}>{currentPage - i}</a></div>
-      {/if}
-    {/each}
-  {:else}
-    {#each [2,1] as i}
-      {#if currentPage - i > 0}
-      <div><a href="/seed/" on:click|preventDefault={() => setCurrentPage(currentPage - i)}>{currentPage - i}</a></div>
-      {/if}
-    {/each}
-  {/if}
-  <!-- current -->
-  <div><span>{currentPage}</span></div>
-  <!-- pages after current -->
-  {#if currentPage == 1}
-    {#each Array(2) as _, i}
-      {#if currentPage + (i+1) <= totalPages}
-        <div><a href="/seed/" on:click|preventDefault={() => setCurrentPage(currentPage + (i+1))}>{currentPage + (i+1)}</a></div>
-      {/if}
-      {#if i == 1 && currentPage + i != totalPages && totalPages > 3}
+  <!--  -->
+  <div id='listnav'>
+    <button disabled='{currentPage <= 1}' on:click|preventDefault={() => setCurrentPage(1)}>&lt&lt</button>
+    <button disabled='{currentPage <= 1}' on:click|preventDefault={() => setCurrentPage(currentPage - 1)}>&lt</button>
+    <!-- pages before current -->
+    {#if currentPage != totalPages}
+      {#each [1] as i}
+        {#if currentPage - i > 0}
+        <div><a href='/seed/' on:click|preventDefault={() => setCurrentPage(currentPage - i)}>{currentPage - i}</a></div>
+        {/if}
+      {/each}
+    {:else}
+      {#each [2,1] as i}
+        {#if currentPage - i > 0}
+        <div><a href='/seed/' on:click|preventDefault={() => setCurrentPage(currentPage - i)}>{currentPage - i}</a></div>
+        {/if}
+      {/each}
+    {/if}
+    <!-- current -->
+    <div><span>{currentPage}</span></div>
+    <!-- pages after current -->
+    {#if currentPage == 1}
+      {#each Array(2) as _, i}
+        {#if currentPage + (i+1) <= totalPages}
+          <div><a href='/seed/' on:click|preventDefault={() => setCurrentPage(currentPage + (i+1))}>{currentPage + (i+1)}</a></div>
+        {/if}
+        {#if i == 1 && currentPage + i != totalPages && totalPages > 3}
+          <div id='total'>/ {totalPages}</div>
+        {/if}
+      {/each}
+    {:else}
+      {#each Array(1) as _, i}
+        {#if currentPage + (i+1) <= totalPages}
+          <div><a href='/seed/' on:click|preventDefault={() => setCurrentPage(currentPage + (i+1))}>{currentPage + (i+1)}</a></div>
+        {/if}
+      {#if currentPage + i < totalPages - 1 && totalPages > 3}
         <div id='total'>/ {totalPages}</div>
       {/if}
-    {/each}
-  {:else}
-    {#each Array(1) as _, i}
-      {#if currentPage + (i+1) <= totalPages}
-        <div><a href="/seed/" on:click|preventDefault={() => setCurrentPage(currentPage + (i+1))}>{currentPage + (i+1)}</a></div>
-      {/if}
-    {#if currentPage + i < totalPages - 1 && totalPages > 3}
-      <div id='total'>/ {totalPages}</div>
+      {/each}
     {/if}
-    {/each}
-  {/if}
-  <button disabled='{currentPage >= totalPages}' on:click={() => setCurrentPage(currentPage + 1)}>&gt</button>
-  <button disabled='{currentPage >= totalPages}' on:click={() => setCurrentPage(totalPages)}>&gt&gt</button>
-</div>
-<!--  -->
+    <button disabled='{currentPage >= totalPages}' on:click={() => setCurrentPage(currentPage + 1)}>&gt</button>
+    <button disabled='{currentPage >= totalPages}' on:click={() => setCurrentPage(totalPages)}>&gt&gt</button>
+  </div>
+  <!--  -->
   </div>
 </div>
 {/key}
@@ -142,9 +138,12 @@ function clearAddresses() {
   {/if}
 </div>
 
-<style lang="scss">
+<style lang='scss'>
   * {
     user-select: none;
+  }
+  .clickable {
+    cursor: pointer;
   }
 
   .generator {
@@ -235,20 +234,18 @@ function clearAddresses() {
       padding: 0.3em;
       margin-bottom: 0;
       margin-top: 0;
-      // flex-grow: 1;
     }
 
     #listnav {
       display: flex;
       flex-direction: row;
-      // flex-grow: 20;
 
       div {
         line-height: 2em;
         
         a, span {
           margin: 0 0.2em;
-          font-feature-settings: "tnum";
+          font-feature-settings: 'tnum';
         }
 
         span {
@@ -265,10 +262,10 @@ function clearAddresses() {
       button {
         width: 3em;
         height: 2em;
-        line-height: 0.5em;
+        line-height: 0;
         padding: 0.5em;
         margin: 0 0.15em;
-        font-feature-settings: "tnum";
+        font-feature-settings: 'tnum';
       }
 
       button:nth-of-type(4) {

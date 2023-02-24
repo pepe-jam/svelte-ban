@@ -14,7 +14,7 @@
 
 <nav>
   {#each nav as item}
-    <a href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
+    <a rel='external' href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
   {/each}
 </nav>
 
