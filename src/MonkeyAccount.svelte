@@ -1,110 +1,152 @@
 <script lang="ts">
-    import { Main, BananodeApi, BananoUtil } from "@bananocoin/bananojs";
-    import "https";
+  export let bananodeApi: string
 
-    Main.setBananodeApiUrl("https://kaliumapi.appditto.com/api");
+  let account = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
+  let promise = 0 //getBalance(account)
 
-    let account =
-        "ban_3banobotojqz8pkm1uectwb8baqjkfhq38e6fbwdrp51qjnwemepzc4ytowy";
-    let promise = checkBalance(account);
-
-    // function checkBalance() {
-    //     BananodeApi.getAccountBalanceRaw(
-    //         "ban_3banobotojqz8pkm1uectwb8baqjkfhq38e6fbwdrp51qjnwemepzc4ytowy"
-    //     )
-    //         .then((raw_bal) => {
-    //             let ban_parts = Main.getBananoPartsFromRaw(raw_bal);
-
-    //             // let ban_parts = BananoUtil.getAmountPartsFromRaw(raw_bal, 'ban_');
-    //             console.log("banano parts:", ban_parts);
-    //             return (
-    //                 Number(ban_parts.banano) + Number(ban_parts.banoshi) / 100
-    //             );
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //             return 2;
-    //         });
-    // }
-
-    async function checkBalance(account: string) {
-        let raw_bal;
-        try {
-            raw_bal = await BananodeApi.getAccountBalanceRaw(
-                "ban_3banobotojqz8pkm1uectwb8baqjkfhq38e6fbwdrp51qjnwemepzc4ytowy"
-            );
-        } catch (error) {
-            console.log(error);
-            return error;
-        }
-        
-        let bal_parts = BananoUtil.getAmountPartsFromRaw(raw_bal, 'ban_');
-        console.log("banano parts:", bal_parts);
-        return Number(bal_parts.banano) + Number(bal_parts.banoshi) / 100;
+  async function getBalance(account: string) {
+    const req = {
+      action: 'account_balance',
+      account: account,
     }
 
-    async function getRandomNumber() {
-        const res = await fetch(`https://svelte.dev/tutorial/random-number`);
-        const text = await res.text();
-
-        if (res.ok) {
-            return text;
-        } else {
-            throw new Error(text);
-        }
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req),
     }
 
-    function handleClick() {
-        promise = checkBalance(account);
+    try {
+      const response = await fetch(bananodeApi, options)
+      const result = await response.json()
+      return Number(result.balance_decimal).toFixed(2)
+    } catch (error) {
+      console.error(error)
     }
+  }
+
+  function handleClick() {
+    promise = getBalance(account)
+  }
 </script>
 
 <div class="account">
-    <div>
-        <div class="address">
-            {account}
-        </div>
-        <div class="balance">
-            {#await promise}
-                <p>...waiting</p>
-            {:then balance}
-                <p style="color: #FBDD11">{balance} BAN</p>
-            {:catch error}
-                <p style="color: red">{error.message}</p>
-            {/await}
-        </div>
+  <div>
+    <div class="address">
+      {account}
     </div>
-    <a href="https://creeper.banano.cc/account/{account}" target="_blank" rel="noreferrer">
-        <img
-            src="https://monkey.banano.cc/api/v1/monkey/{account}"
-            alt="monkey avatar"
-        />
-    </a>
-    <button on:click={handleClick}>Update Balance</button>
+    <div class="balance">
+      {#await promise}
+        <p>...waiting</p>
+      {:then balance}
+        <p style="color: #FBDD11">{balance} BAN</p>
+      {:catch error}
+        <p style="color: red">{error.message}</p>
+      {/await}
+    </div>
+  </div>
+  <a href="https://creeper.banano.cc/account/{account}" target="_blank" rel="noreferrer">
+    <img src="https://monkey.banano.cc/api/v1/monkey/{account}" alt="monkey avatar" />
+  </a>
+  <!-- <button on:click={handleClick}>Update Balance</button> -->
 </div>
 
 <style lang="scss">
-    .account {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        font-size: 2em;
+  .account {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7em;
+    margin-top: 1.5em;
+    word-break: break-all;
 
-        div {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-            letter-spacing: 0.1em;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      letter-spacing: 0.1em;
 
-            .balance {
-                font-size: 0.7em;
-                text-align: right;
-            }
-        }
-
-        img {
-            height: 8em;
-        }
+      .balance {
+        font-size: 1em;
+        text-align: right;
+      }
     }
+
+    img {
+      height: 10em;
+    }
+  }
+  // X-Small devices (portrait phones, less than 576px)
+
+  // Small devices (landscape phones, 576px and up)
+  @media (min-width: 576px) {
+    .account {
+      font-size: 1.15em;
+      margin-top: 1.5em;
+      padding: 0.3em;
+
+      div {
+        gap: 0.5em;
+        letter-spacing: 0.05em;
+
+        .balance {
+          font-size: 1.3em;
+        }
+      }
+    }
+  }
+
+  // Medium devices (tablets, 768px and up)
+  @media (min-width: 768px) {
+    .account {
+      font-size: 1.4em;
+      margin-top: 1.5em;
+      padding: 1.5em;
+
+      div {
+        .balance {
+          font-size: 1.3em;
+        }
+      }
+    }
+  }
+
+  // Large devices (desktops, 992px and up)
+  @media (min-width: 992px) {
+    .account {
+      font-size: 1.5em;
+    }
+  }
+
+  // X-Large devices (large desktops, 1200px and up)
+  @media (min-width: 1200px) {
+    .account {
+      font-size: 1.5em;
+      padding: 0.5em 3em;
+    }
+  }
+
+  // XX-Large devices (larger desktops, 1400px and up)
+  @media (min-width: 1400px) {
+    .account {
+      font-size: 1.8em;
+    }
+  }
+  // .account {
+  //     font-size: 2em;
+
+  //     div {
+  //         gap: 0.5em;
+  //         letter-spacing: 0.1em;
+
+  //         .balance {
+  //             font-size: 0.7em;
+  //         }
+  //     }
+
+  //     img {
+  //         height: 8em;
+  //     }
+  // }
 </style>

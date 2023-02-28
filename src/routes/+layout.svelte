@@ -22,7 +22,7 @@
 
 <style lang="scss">
   nav {
-    font-size: 3vh;
+    font-size: 1.4em;
     text-align: center;
     user-select: none;
 
@@ -71,6 +71,12 @@
       transform: scaleX(1);
       background-color: $ban-y;
       color: $ban-y;
+    }
+  }
+
+  @media (min-width: 576px) {
+    nav {
+      font-size: 2.1em;
     }
   }
 </style>
