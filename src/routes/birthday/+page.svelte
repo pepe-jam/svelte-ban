@@ -61,7 +61,7 @@
 
 <body>
   <div class="birthday">
-    <p class="title"><y>Banano</y>'s Birthday was on April 1, 2018</p>
+    <p class="title"><y>Banano</y>'s Birthday is on April 1, 2018</p>
     {#if bdToday}
       <p class="subtitle">that means <y>today is Banano's birthday party!</y></p>
     {:else}

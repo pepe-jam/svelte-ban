@@ -318,6 +318,7 @@
       font-size: 1.6em;
       #addresses {
         #list {
+          height: 21.3em;
           #addr {
             font-size: 0.5em;
 
