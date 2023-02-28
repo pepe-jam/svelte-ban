@@ -25,6 +25,9 @@
     font-size: 1.4em;
     text-align: center;
     user-select: none;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.2em;
+    border-bottom: $ban-y solid 1px;
 
     a:hover {
       color: $ban-g;

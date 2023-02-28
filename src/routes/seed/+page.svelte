@@ -214,13 +214,13 @@
       padding: 0.5em;
       margin: 1em 0 0 0;
       width: 15em;
+      height: 19.4em;
       div #addr {
         margin-bottom: 0;
         display: flex;
         flex-flow: row;
         align-items: center;
         font-size: 0.54em;
-        font-family: Overpass Mono, monospace;
         gap: 1em;
         border-top: 1px solid #fff;
         overflow-wrap: anywhere;
@@ -291,7 +291,7 @@
       }
 
       #total {
-        line-height: 3em;
+        // line-height: 3em;
         font-size: 0.7em;
         display: none;
       }
@@ -316,6 +316,17 @@
   @media (min-width: 420px) {
     .generator {
       font-size: 1.6em;
+      #addresses {
+        #list {
+          #addr {
+            font-size: 0.5em;
+
+            #monkey {
+              width: 15em;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -326,8 +337,10 @@
       #addresses {
         #list {
           width: 20em;
+          height: 25.8em;
 
           #addr {
+            font-size: 0.54em;
             #monkey {
               width: 13em;
             }
@@ -344,18 +357,39 @@
 
   @media (min-width: 768px) {
     .generator {
-      font-size: 2em;
+      font-size: 1.9em;
+
+      #addresses {
+        #list {
+          width: 23em;
+          height: 18em;
+
+          #addr {
+            font-size: 0.47em;
+            #monkey {
+              width: 7.5em;
+            }
+          }
+        }
+      }
     }
   }
 
   // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
     .generator {
-      font-size: 2.3em;
-
+      font-size: 1.85em;
       #addresses {
         #list {
-          width: 22em;
+          width: 26em;
+          height: 20.8em;
+
+          #addr {
+            font-size: 0.54em;
+            #monkey {
+              width: 7.5em;
+            }
+          }
         }
       }
     }
@@ -368,7 +402,7 @@
   // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
     .generator {
-      font-size: 1.17em;
+      font-size: 1.18em;
 
       #seed {
         font-size: 1.3em;
@@ -381,6 +415,7 @@
       #addresses {
         #list {
           width: 55em;
+          height: 37.5em;
 
           #addr {
             font-size: 1.05em;
@@ -403,7 +438,7 @@
               font-size: 1.1em;
             }
             #total {
-              line-height: 3em;
+              // line-height: 3em;
               font-size: 0.7em;
             }
 
