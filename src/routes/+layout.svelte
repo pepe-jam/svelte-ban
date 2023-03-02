@@ -27,7 +27,7 @@
     user-select: none;
     margin-bottom: 0.5em;
     padding-bottom: 0.2em;
-    border-bottom: $ban-y solid 1px;
+    border-bottom: $ban-y solid 2px;
 
     a:hover {
       color: $ban-g;

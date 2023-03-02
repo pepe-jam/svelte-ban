@@ -55,7 +55,6 @@
   .account {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
     font-size: 0.7em;
     margin-top: 1.5em;
@@ -133,20 +132,4 @@
       font-size: 1.8em;
     }
   }
-  // .account {
-  //     font-size: 2em;
-
-  //     div {
-  //         gap: 0.5em;
-  //         letter-spacing: 0.1em;
-
-  //         .balance {
-  //             font-size: 0.7em;
-  //         }
-  //     }
-
-  //     img {
-  //         height: 8em;
-  //     }
-  // }
 </style>
