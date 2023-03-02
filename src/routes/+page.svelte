@@ -2,41 +2,53 @@
   import bananoLogo from '../assets/banano-icon.svg'
   import MonkeyAccount from '../MonkeyAccount.svelte'
   import AddressSearch from '../AddressSearch.svelte'
+  import TransactionHistory from '../TransactionHistory.svelte'
+  import type { SvelteComponent } from 'svelte'
 
-  let account: string
   const bananodeApi: string = 'https://kaliumapi.appditto.com/api'
+  let account: string
+  let transactionHistory: SvelteComponent
 </script>
 
 <div class="title">
   <a href="https://banano.cc/" target="_blank" rel="noopener noreferrer">
     <img src={bananoLogo} class="logo banano" alt="Banano Logo" />
   </a>
-  1 Ban = 1 Ban
+  <div>
+    <div>1 Ban = 1 Ban</div>
+    <div class="subtitle">did you know?</div>
+  </div>
   <a href="https://banano.cc/" target="_blank" rel="noopener noreferrer">
     <img src={bananoLogo} class="logo banano" alt="Banano Logo" />
   </a>
 </div>
 
-<AddressSearch bind:account />
 <MonkeyAccount {bananodeApi} />
+<AddressSearch bind:account {transactionHistory} />
+<TransactionHistory bind:this={transactionHistory} {bananodeApi} {account}/>
+
 <!-- {account} -->
 
 <!-- todo gorilla banano card -->
 <style lang="scss">
+  .subtitle {
+    font-size: 0.6em;
+    letter-spacing: 0.15em;
+    text-align: center;
+  }
+
   .title {
     display: flex;
     flex-flow: row;
     align-items: center;
     font-size: 1.2em;
+    letter-spacing: 0.05em;
+
 
     .logo {
       width: 2.3em;
       padding: 1em;
       vertical-align: middle;
-    }
-
-    .logo.banano:hover {
-      filter: drop-shadow(0 0 1em #ff3e00aa);
     }
   }
 

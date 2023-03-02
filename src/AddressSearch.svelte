@@ -1,35 +1,34 @@
 <script lang="ts">
-  export let account: string
+  import type { SvelteComponent } from 'svelte'
+  import { BananoUtil } from '@bananocoin/bananojs'
 
-  async function getAccountHistory(account: string, count: number = 5) {
-    const req = {
-      action: 'account_history',
-      account: account,
-      count: count,
+  export let account: string = ''
+  export let transactionHistory: SvelteComponent
+
+  let errorMessage: string = ''
+
+  function validBananoAddress() {
+    const validationInfo = BananoUtil.getBananoAccountValidationInfo(account)
+    if(!validationInfo.valid) {
+      errorMessage = validationInfo.message
     }
+    console.log(validationInfo)
+    return validationInfo.valid
+  }
 
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(req),
-    }
-
-    try {
-      const response = await fetch(bananodeApi, options)
-      const result = await response.json()
-      console.log(result)
-      return result
-    } catch (error) {
-      console.error(error)
+  function handleHistoryButton() {
+    if (validBananoAddress()) {
+      transactionHistory.getAccountHistory()
+      transactionHistory.updateUrlAccount()
     }
   }
 </script>
 
 <div class="search">
-  <label for="input">enter a banano address</label>
+  <label for="input">enter banano address</label>
   <input bind:value={account} type="text" name="input" placeholder="ban_1waifu..." />
+  <button on:click={handleHistoryButton}>get history</button>
+  <!-- new -->
 </div>
 
 <style lang="scss">
@@ -39,9 +38,7 @@
     width: 16em;
     padding: 0.5em 1em;
     font-size: 1em;
-    border: 2px solid $ban-gray2;
     border-radius: 5px;
-    margin-top: 1em;
 
     input {
       font-size: 0.8em;
@@ -56,9 +53,16 @@
       outline: 5em;
       box-shadow: 1px 1px #4cbf4b;
     }
+
+    button {
+      margin-top: 1em;
+      font-size: 0.9em;
+      width: 8em;
+      height: 2.6em;
+    }
   }
 
-    // X-Small devices (portrait phones, less than 576px)
+  // X-Small devices (portrait phones, less than 576px)
 
   // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
