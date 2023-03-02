@@ -63,19 +63,19 @@
     <div id="seed">Use the button to generate a new banano seed</div>
     <button on:click={generateBananoSeed}>Generate 🍌 🌱</button>
   {:else}
-    <div id="seed" class="clickable">
+    <div class="seed clickable">
       Your generated seed is<br /><span on:mousedown={copySeed}>{seed}</span>
     </div>
     {#if addresses.length !== 0}
       <h4>and here some of the addresses that belong to it</h4>
       {#key currentPage}
-        <div id="addresses">
-          <div id="list">
+        <div class="addresses">
+          <div class="list">
             <div in:fade={{ duration: 500, easing: quintIn }}>
               {#each addresses as address, i}
                 {#if i >= addrRangeLow && i < addrRangeHigh}
-                  <div id="addr">
-                    <div id="monkey">
+                  <div class="address">
+                    <div class="monkey">
                       <a target="_blank" rel="noreferrer" href="https://creeper.banano.cc/account/{address}">
                         <img alt="monkey avatar" src="https://monkey.banano.cc/api/v1/monkey/{address}" />
                       </a>
@@ -90,10 +90,10 @@
               {/each}
             </div>
           </div>
-          <div id="buttons">
+          <div class="buttons">
             <button on:click={generateAddresses}>more</button>
             <!--  -->
-            <div id="listnav">
+            <div class="listnav">
               <button disabled={currentPage <= 1} on:click|preventDefault={() => setCurrentPage(1)}>&lt&lt</button>
               <button disabled={currentPage <= 1} on:click|preventDefault={() => setCurrentPage(currentPage - 1)}
                 >&lt</button
@@ -186,7 +186,7 @@
     }
   }
 
-  #seed {
+  .seed {
     font-size: 0.75em;
     color: #fff;
     overflow-wrap: anywhere;
@@ -201,13 +201,13 @@
     margin: 0.2em;
   }
 
-  #addresses {
+  .addresses {
     align-items: end;
     align-self: center;
     text-align: left;
     font-size: 1em;
 
-    #list {
+    .list {
       background: #181a1b;
       border: 3px solid #fff;
       border-radius: 0.4em;
@@ -215,7 +215,8 @@
       margin: 1em 0 0 0;
       width: 15em;
       height: 19.4em;
-      div #addr {
+      justify-content: space-evenly;
+      div .address {
         margin-bottom: 0;
         display: flex;
         flex-flow: row;
@@ -226,7 +227,8 @@
         overflow-wrap: anywhere;
         text-align: left;
 
-        #monkey {
+        .monkey {
+          height: 7.3em;
           width: 13em;
         }
 
@@ -246,14 +248,14 @@
         color: $ban-g;
       }
 
-      #addr:nth-of-type(1) {
+      .address:nth-of-type(1) {
         border: none;
         margin-top: 0;
       }
     }
   }
 
-  #buttons {
+  .buttons {
     display: flex;
     flex-flow: row;
     justify-content: space-between;
@@ -268,7 +270,7 @@
       margin-top: 0;
     }
 
-    #listnav {
+    .listnav {
       display: flex;
       flex-direction: row;
       font-size: 0.9em;
@@ -316,14 +318,15 @@
   @media (min-width: 420px) {
     .generator {
       font-size: 1.6em;
-      #addresses {
-        #list {
+      .addresses {
+        .list {
           height: 21.3em;
-          #addr {
+          .address {
             font-size: 0.5em;
 
-            #monkey {
-              width: 15em;
+            .monkey {
+              height: 8.8em;
+              width: 13em;
             }
           }
         }
@@ -335,19 +338,21 @@
     .generator {
       font-size: 1.6em;
 
-      #addresses {
-        #list {
+      .addresses {
+        .list {
+          padding: 0 1em;
           width: 20em;
           height: 25.8em;
 
-          #addr {
+          .address {
             font-size: 0.54em;
-            #monkey {
+            .monkey {
+              height: 9.7em;
               width: 13em;
             }
           }
         }
-        #listnav {
+        .listnav {
           #total {
             display: block;
           }
@@ -360,15 +365,16 @@
     .generator {
       font-size: 1.9em;
 
-      #addresses {
-        #list {
+      .addresses {
+        .list {
           width: 23em;
           height: 18em;
 
-          #addr {
+          .address {
             font-size: 0.47em;
-            #monkey {
-              width: 7.5em;
+            .monkey {
+              height: 7.6em;
+              width: 7em;
             }
           }
         }
@@ -380,14 +386,14 @@
   @media (min-width: 992px) {
     .generator {
       font-size: 1.85em;
-      #addresses {
-        #list {
+      .addresses {
+        .list {
           width: 26em;
           height: 20.8em;
 
-          #addr {
+          .address {
             font-size: 0.54em;
-            #monkey {
+            .monkey {
               width: 7.5em;
             }
           }
@@ -403,9 +409,9 @@
   // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
     .generator {
-      font-size: 1.18em;
+      font-size: 1.15em;
 
-      #seed {
+      .seed {
         font-size: 1.3em;
       }
 
@@ -413,28 +419,29 @@
         font-size: 1.3em;
       }
 
-      #addresses {
-        #list {
+      .addresses {
+        .list {
           width: 55em;
           height: 37.5em;
 
-          #addr {
+          .address {
             font-size: 1.05em;
             gap: 3em;
-            #monkey {
-              width: 6.9em;
+            .monkey {
+              height: 7em;
+              width: 7em;
             }
           }
         }
 
-        #buttons {
+        .buttons {
           button {
             width: 4em;
             height: 2em;
             line-height: 0em;
             font-size: 1.2em;
           }
-          #listnav {
+          .listnav {
             div {
               font-size: 1.1em;
             }

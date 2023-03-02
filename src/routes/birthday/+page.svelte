@@ -71,9 +71,9 @@
       <div class="countdown today">
         {#each _digits.slice(1) as digit}
           {#if digit.label != 'hours'}
-            <div id="colon">:</div>
+            <div class="colon">:</div>
           {/if}
-          <div class="col" id={digit.label}>
+          <div class="col">
             <div class="digits">
               {#each digit.value as number}
                 {#key number}
@@ -96,9 +96,9 @@
       <div class="countdown">
         {#each _digits as digit}
           {#if digit.label != 'days'}
-            <div id="colon">:</div>
+            <div class="colon">:</div>
           {/if}
-          <div class="col" id={digit.label}>
+          <div class="col">
             <div class="digits">
               {#each digit.value as number}
                 {#key number}
@@ -178,7 +178,7 @@
         }
       }
 
-      #colon {
+      .colon {
         font-size: 9em;
         margin-top: 0em;
         padding: 0 0.05em;
@@ -232,7 +232,7 @@
           font-size: 10em;
         }
 
-        #colon {
+        .colon {
           font-size: 9em;
           margin-top: 0em;
           padding: 0 0.05em;
