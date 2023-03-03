@@ -1,121 +1,160 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  let yesterday: Date = new Date()
+  const today: Date = new Date()
+  const yesterday: Date = new Date(today.setDate(today.getDate() - 1))
+  const tomorrow: Date = new Date(today.setDate(today.getDate() + 1))
   let month: string, day: string, year: string
-  yesterday.setDate(yesterday.getDate() - 1)
+  let maxDate: string
 
   let currency: string = 'usd'
-  const currencies: { [key: string]: string } = {
-    usd: '$',
-    eur: '€',
-    ban: '🍌',
-  }
+  const currencies: Map<string, string> = new Map([
+    ['usd', '$'],
+    ['eur', '€'],
+    ['ban', '🍌'],
+  ])
+
   const birthday: Date = new Date('2018-10-03')
-  let datePicker: string
+  let pickedDate: string
   let dateString: string
   let displayDate: string
-  let prediction: Number = 0.000001
-  $: decimalCount = String(prediction).split('.')[1]?.length ?? 0
+  let prediction: number = 0.000001
+  // $: decimalCount = String(prediction).split('.')[1]?.length ?? 0
 
-  let prices: { [key: string]: number }
-  $: deviation = prices ? Number((((Number(prediction) - prices[currency]) / prices[currency]) * 100).toFixed(2)) : 0
+  let prices: Map<string, number> = new Map()
+  const priceHistory: Map<string, Map<string, number>> = new Map()
+  let deviation: number
 
-  let predictionInput: HTMLInputElement
+  let currencyInput: HTMLSelectElement
 
   onMount(() => {
-    year = '' + yesterday.getUTCFullYear()
-    month = '' + (yesterday.getUTCMonth() + 1)
-    day = '' + yesterday.getUTCDate()
+    year = '' + today.getUTCFullYear()
+    month = '' + (today.getUTCMonth() + 1)
+    day = '' + today.getUTCDate()
 
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
 
-    datePicker = [year, month, day].join('-')
+    maxDate = [year, month, day].join('-')
+    pickedDate = maxDate
   })
 
-  // when is coingecko current_price updated for new day? didnt work at 12am utc
-  async function getBanPrice() {
-    // check if button should be pressable (date)
+  async function handleGuessButton() {
+    await getBanPrice()
+    updateDisplayDate()
+    updateDeviation()
+  }
 
-    ;[year, month, day] = datePicker.split('-')
-    dateString = [day, month, year].join('-')
-    let api = 'https://api.coingecko.com/api/v3/coins/banano/history?date=' + dateString
-    let response = await fetch(api)
-    if (response.ok) {
-      prices = (await response.json()).market_data.current_price
-      prices['ban'] = 1
-    }
+  function updateCurrency() {
+    currency = currencyInput.value
+  }
 
-    for (let key in prices) {
-      let value = prices[key]
-      prices[key] = Number(value.toFixed(6))
-    }
-    console.log(predictionInput.value)
-    prediction = Number(predictionInput.value)
+  function updateDeviation() {
+    updateCurrency()
+    deviation = prices
+      ? Number((((Number(prediction) - prices.get(currency)!) / prices.get(currency)!) * 100).toFixed(2))
+      : 0
+  }
 
-    displayDate = new Date(datePicker).toLocaleDateString('en-us', {
+  function updateDisplayDate() {
+    displayDate = new Date(pickedDate).toLocaleDateString('en-us', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     })
   }
+
+  function addNeededCurrencies(toBeFiltered: { [key: string]: number }) {
+    prices.set('ban', 1)
+    Object.keys(toBeFiltered).forEach((key) => {
+      if (currencies.has(key)) {
+        prices.set(key, Number(toBeFiltered[key].toFixed(6)))
+      }
+    })
+  }
+
+  async function getBanPrice() {
+    // return data from price history if date was already requested
+    if (priceHistory.has(pickedDate)) {
+      prices = priceHistory.get(pickedDate)!
+      return
+    }
+    // no request if in future
+    if (new Date(pickedDate) > tomorrow) {
+      return
+    }
+
+    // get current price from coingecko
+    if (new Date(pickedDate) > yesterday && new Date(pickedDate) < tomorrow) {
+      const api =
+        'https://api.coingecko.com/api/v3/coins/banano?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false'
+
+      const response = await fetch(api)
+      if (response.ok) {
+        const result = (await response.json()).market_data.current_price
+        addNeededCurrencies(result)
+      }
+    } else if (new Date(pickedDate) < today) {
+      // get prices of picked date from coingecko
+      ;[year, month, day] = pickedDate.split('-')
+      dateString = [day, month, year].join('-')
+      const api = 'https://api.coingecko.com/api/v3/coins/banano/history?date=' + dateString
+      const response = await fetch(api)
+
+      if (response.ok) {
+        const result = (await response.json()).market_data.current_price
+        addNeededCurrencies(result)
+      }
+    }
+    priceHistory.set(pickedDate, new Map(prices))
+  }
 </script>
 
-<div id="main">
-  <div id="title">
+<div class="main">
+  <div class="title">
     Guess the <span>ban</span> price!
   </div>
   <div>
-    <div id="currency">
+    <div class="currency">
       <label for="select">choose a currency,</label>
-      <select bind:value={currency} name="currencies">
+      <select bind:this={currencyInput} name="currencies">
         <option value="usd">USD $</option>
         <option value="eur">EUR €</option>
         <option value="ban">BAN 🍌</option>
       </select>
     </div>
     <div class="error" />
-    <div id="date">
+    <div class="date">
       <label for="datepicker">pick a date and</label>
-      <div id="container">
-        <input bind:value={datePicker} type="date" id="datepicker" name="datepicker" min="2018-10-03" />
+      <div class="container">
+        <input bind:value={pickedDate} type="date" name="datepicker" min="2018-10-03" max={maxDate} />
       </div>
       <div class="error">
-        {#if new Date(datePicker) > yesterday || new Date(datePicker) < birthday}
-          Pick a date from 2018-10-03 to yesterday.
+        {#if new Date(pickedDate) > tomorrow || new Date(pickedDate) < birthday}
+          Pick a date from 2018-10-03 to now.
         {/if}
       </div>
     </div>
-    <div id="guesser">
+    <div class="guesser">
       <label for="guess">guess the <span>ban</span> price!</label>
-      <div id="input-container">
-        <input
-          bind:value={prediction}
-          bind:this={predictionInput}
-          type="number"
-          min="0"
-          step="0.000001"
-          id="guess"
-          name="guess"
-        />
-        <div id="symbol">{currencies[currency]}</div>
+      <div class="input-container">
+        <input bind:value={prediction} type="number" min="0" step="0.000001" class="guess" name="guess" />
+        <div class="symbol">{currencies.get(currency)}</div>
       </div>
       <div class="error">
-        {#if prediction < 0 || decimalCount > 6}
-          Enter positive numbers with up to 6 decimals.
+        {#if prediction < 0}
+          Enter positive numbers only.
         {:else if prediction == 0}
           ...but maybe try to put in some higher number.
         {/if}
       </div>
     </div>
   </div>
-  <button on:click={getBanPrice}>take a guess 🍌</button>
-  {#if prices}
-    <!-- on currency change remove result -->
-    <div id="result">
+  <button on:click={handleGuessButton}>take a guess 🍌</button>
+  {#if prices.size != 0}
+    <div class="result">
       <div>
-        {#if prices[currency] == prediction}
+        {#if deviation == 0}
           Congratulations, your guess was accurate!
         {/if}
         {#if deviation < 0}
@@ -137,11 +176,11 @@
         on <b>{displayDate}</b> was
         <b>
           {#if currency == 'usd'}
-            {currencies[currency]}{prices[currency]}
+            {currencies.get(currency)}{prices.get(currency)}
           {:else if currency == 'ban'}
-            {prices[currency]} {currencies[currency]}
+            {prices.get(currency)} {currencies.get(currency)}
           {:else}
-            {prices[currency]} {currencies[currency]}
+            {prices.get(currency)} {currencies.get(currency)}
           {/if}
         </b>
       </div>
@@ -150,7 +189,7 @@
 </div>
 
 <style lang="scss">
-  #title {
+  .title {
     font-size: 1.4em;
 
     text-align: center;
@@ -185,8 +224,7 @@
     text-overflow: '';
   }
 
-  select,
-  #datepicker {
+  select {
     cursor: pointer;
   }
 
@@ -216,7 +254,7 @@
     box-shadow: 0px 0px 3px $ban-y;
   }
 
-  #main {
+  .main {
     display: flex;
     flex-direction: column;
     word-break: break-word;
@@ -226,7 +264,7 @@
     font-size: 1.3em;
   }
 
-  #currency {
+  .currency {
     display: flex;
     flex-flow: column;
   }
@@ -237,21 +275,17 @@
     display: none;
   }
 
-  #datepicker {
-    width: 12.5em;
-  }
-
-  #guess {
+  .guess {
     width: 11em;
     justify-content: center;
   }
 
-  #input-container {
+  .input-container {
     display: flex;
     flex-flow: row;
   }
 
-  #symbol {
+  .symbol {
     font-size: 1em;
     padding: 0.15em 0.25em;
     width: 1em;
@@ -265,8 +299,8 @@
     color: deeppink;
   }
 
-  #result {
-    display: block;
+  .result {
+    font-size: 0.8em;
     text-align: center;
     border-top: solid;
     border-bottom: solid;
@@ -282,31 +316,34 @@
 
   //
   @media (min-width: 576px) {
-    #main {
+    .main {
       font-size: 1.7em;
+    }
+    .result {
+      font-size: 1em;
     }
   }
 
   // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
-    #main {
+    .main {
       font-size: 1.9em;
     }
   }
 
   // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
-    #main {
+    .main {
       font-size: 2em;
     }
   }
 
   // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
-    #main {
+    .main {
       font-size: 2em;
 
-      #title {
+      .title {
         margin-top: 0.1em;
         margin-bottom: 0.5em;
         font-size: 2em;
@@ -316,10 +353,10 @@
 
   // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
-    #main {
+    .main {
       font-size: 2em;
 
-      #title {
+      .title {
         margin-top: 0.1em;
         margin-bottom: 0.5em;
         font-size: 2.5em;
