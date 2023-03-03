@@ -50,11 +50,12 @@ button {
   // margin-top: 1em;
   cursor: pointer;
 }
-
+// does not fully activate?
 button:disabled {
   color: $ban-gray2;
   background: $ban-gray;
   border: 3px solid $ban-gray2;
+  filter: grayscale(80%);
 }
 
 button:disabled:hover {

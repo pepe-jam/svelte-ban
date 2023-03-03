@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { dev } from '$app/environment'
   import { onMount } from 'svelte'
+  import { quintOut } from 'svelte/easing'
+  import { scale } from 'svelte/transition'
 
   const today: Date = new Date()
   const yesterday: Date = new Date(today.setDate(today.getDate() - 1))
@@ -19,6 +22,8 @@
   let dateString: string
   let displayDate: string
   let prediction: number = 0.000001
+
+  $: validInputs = !(new Date(pickedDate) > tomorrow || new Date(pickedDate) < birthday) && !(prediction <= 0)
   // $: decimalCount = String(prediction).split('.')[1]?.length ?? 0
 
   let prices: Map<string, number> = new Map()
@@ -150,41 +155,42 @@
       </div>
     </div>
   </div>
-  <button on:click={handleGuessButton}>take a guess 🍌</button>
+  <button on:click={handleGuessButton} disabled={!validInputs}>take a guess 🍌</button>
   {#if prices.size != 0}
-    <div class="result">
-      <div>
-        {#if deviation == 0}
-          Congratulations, your guess was accurate!
-        {/if}
-        {#if deviation < 0}
-          Your guess was {-1 * deviation}% lower!
-        {:else if deviation > 0}
-          Your guess was {deviation}% higher!
-        {/if}
-      </div>
-      <div>
-        According to
-        <img
-          src="https://static.coingecko.com/s/thumbnail-d5a7c1de76b4bc1332e48227dc1d1582c2c92721b5552aae76664eecb68345c9.png"
-          alt="cg"
-        />
-        <a href="https://www.coingecko.com/en/coins/banano">coingecko</a>, the price of
-        <img src="https://assets.coingecko.com/coins/images/6226/small/banano-transparent.png" alt="ban" /><a
-          href="https://www.banano.cc">Banano</a
-        >
-        on <b>{displayDate}</b> was
-        <b>
-          {#if currency == 'usd'}
-            {currencies.get(currency)}{prices.get(currency)}
-          {:else if currency == 'ban'}
-            {prices.get(currency)} {currencies.get(currency)}
+    {#key [deviation, dateString, currency]}
+      <div class="result" in:scale={{ duration: 300, easing: quintOut }} out:scale={{ duration: 0 }}>
+        <div>
+          {#if deviation < 0}
+            Your guess was {-1 * deviation}% lower!
+          {:else if deviation > 0}
+            Your guess was {deviation}% higher!
           {:else}
-            {prices.get(currency)} {currencies.get(currency)}
+            Congratulations, your guess was accurate!
           {/if}
-        </b>
+        </div>
+        <div>
+          According to
+          <img
+            src="https://static.coingecko.com/s/thumbnail-d5a7c1de76b4bc1332e48227dc1d1582c2c92721b5552aae76664eecb68345c9.png"
+            alt="coingecko"
+          />
+          <a href="https://www.coingecko.com/en/coins/banano">coingecko</a>, the price of
+          <img src="https://assets.coingecko.com/coins/images/6226/small/banano-transparent.png" alt="ban" /><a
+            href="https://www.banano.cc">Banano</a
+          >
+          on <b>{displayDate}</b> was
+          <b>
+            {#if currency == 'usd'}
+              {currencies.get(currency)}{prices.get(currency)}
+            {:else if currency == 'ban'}
+              {prices.get(currency)} {currencies.get(currency)}
+            {:else}
+              {prices.get(currency)} {currencies.get(currency)}
+            {/if}
+          </b>
+        </div>
       </div>
-    </div>
+    {/key}
   {/if}
 </div>
 
@@ -247,11 +253,16 @@
     cursor: pointer;
   }
 
+  button:disabled {
+    color: $ban-gray2;
+    background: $ban-gray;
+    border: 3px solid $ban-gray2;
+    filter: grayscale(80%);
+  }
+
   input:focus,
   select:focus {
-    outline: 0.15em solid $ban-y;
-    // inset-inline: 0.05em solid #000;
-    box-shadow: 0px 0px 3px $ban-y;
+    outline: 0.1em solid $ban-y;
   }
 
   .main {
