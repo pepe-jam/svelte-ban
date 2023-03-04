@@ -5,21 +5,14 @@
   export let account: string = ''
   export let transactionHistory: SvelteComponent
 
-  let errorMessage: string = ''
-
-  function validBananoAddress() {
-    const validationInfo = BananoUtil.getBananoAccountValidationInfo(account)
-    if(!validationInfo.valid) {
-      errorMessage = validationInfo.message
-    }
-    console.log(validationInfo)
-    return validationInfo.valid
+  $: validAccount = () => {
+    return BananoUtil.getBananoAccountValidationInfo(account.trim()).valid
   }
 
   function handleHistoryButton() {
-    if (validBananoAddress()) {
-      transactionHistory.getAccountHistory()
-      transactionHistory.updateUrlAccount()
+    account = account.trim()
+    if (validAccount()) {
+      transactionHistory.getAccountHistory(account)
     }
   }
 </script>
@@ -27,8 +20,12 @@
 <div class="search">
   <label for="input">enter banano address</label>
   <input bind:value={account} type="text" name="input" placeholder="ban_1waifu..." />
-  <button on:click={handleHistoryButton}>get history</button>
-  <!-- new -->
+  {#if !validAccount() && account !== ''}
+    <div class="error">Invalid banano address.</div>
+  {:else}
+    <div class="error"/>
+  {/if}
+  <button on:click={handleHistoryButton} disabled={!validAccount()}>get history</button>
 </div>
 
 <style lang="scss">
@@ -55,10 +52,17 @@
     }
 
     button {
-      margin-top: 1em;
+      margin-top: 0.5em;
       font-size: 0.9em;
       width: 8em;
       height: 2.6em;
+    }
+
+    .error {
+      font-size: 0.5em;
+      margin-bottom: 0.5em;
+      height: 0.8em;
+      color: deeppink;
     }
   }
 

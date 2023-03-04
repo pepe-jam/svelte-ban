@@ -1,15 +1,16 @@
 <script lang="ts">
+  import { quintIn } from "svelte/easing"
+  import { fade } from "svelte/transition"
+
+
   export let account: string
   export let bananodeApi: string
 
   let history
   let urlAccount: string
 
-  export function updateUrlAccount() {
+  export async function getAccountHistory(account: string) {
     urlAccount = account
-  }
-
-  export async function getAccountHistory() {
     const req = {
       action: 'account_history',
       account: account,
@@ -35,7 +36,8 @@
 </script>
 
 {#if history}
-  <div class="history">
+<!-- add working animation on update pliz -->
+  <div class="history" transition:fade> 
     <div class="transactions">
       <h2>recent transactions</h2>
       {#each history as t}
