@@ -2,7 +2,7 @@
   export let bananodeApi: string
 
   let account = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
-  let promise = 0 //getBalance(account)
+  let promise: Promise<string|undefined>
 
   async function getBalance(account: string) {
     const req = {
@@ -28,6 +28,7 @@
   function handleClick() {
     promise = getBalance(account)
   }
+
 </script>
 
 <div class="account">
@@ -48,7 +49,8 @@
   <a href="https://creeper.banano.cc/account/{account}" target="_blank" rel="noreferrer">
     <img src="https://monkey.banano.cc/api/v1/monkey/{account}" alt="monkey avatar" />
   </a>
-  <!-- <button on:click={handleClick}>Update Balance</button> -->
+    <!-- <button on:click={handleClick}>Update Balance</button> -->
+
 </div>
 
 <style lang="scss">
