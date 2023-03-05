@@ -4,6 +4,8 @@
   import { quintOut } from 'svelte/easing'
   import { scale } from 'svelte/transition'
 
+  let ready = false
+
   const today: Date = new Date()
   const yesterday: Date = new Date(today.setDate(today.getDate() - 1))
   const tomorrow: Date = new Date(today.setDate(today.getDate() + 1))
@@ -42,6 +44,7 @@
 
     maxDate = [year, month, day].join('-')
     pickedDate = maxDate
+    ready = true
   })
 
   async function handleGuessButton() {
@@ -115,84 +118,86 @@
   }
 </script>
 
-<div class="main">
-  <div class="title">
-    Guess the <span>ban</span> price!
-  </div>
-  <div>
-    <div class="currency">
-      <label for="select">choose a currency,</label>
-      <select bind:this={currencyInput} name="currencies">
-        <option value="usd">USD $</option>
-        <option value="eur">EUR €</option>
-        <option value="ban">BAN 🍌</option>
-      </select>
+{#if ready}
+  <div class="main">
+    <div class="title">
+      Guess the <span>ban</span> price!
     </div>
-    <div class="error" />
-    <div class="date">
-      <label for="datepicker">pick a date and</label>
-      <div class="container">
-        <input bind:value={pickedDate} type="date" name="datepicker" min="2018-10-03" max={maxDate} />
+    <div>
+      <div class="currency">
+        <label for="select">choose a currency,</label>
+        <select bind:this={currencyInput} name="currencies">
+          <option value="usd">USD $</option>
+          <option value="eur">EUR €</option>
+          <option value="ban">BAN 🍌</option>
+        </select>
       </div>
-      <div class="error">
-        {#if new Date(pickedDate) > tomorrow || new Date(pickedDate) < birthday}
-          Pick a date from 2018-10-03 to now.
-        {/if}
-      </div>
-    </div>
-    <div class="guesser">
-      <label for="guess">guess the <span>ban</span> price!</label>
-      <div class="input-container">
-        <input bind:value={prediction} type="number" min="0" step="0.000001" class="guess" name="guess" />
-        <div class="symbol">{currencies.get(currency)}</div>
-      </div>
-      <div class="error">
-        {#if prediction < 0}
-          Enter positive numbers only.
-        {:else if prediction == 0}
-          ...but maybe try to put in some higher number.
-        {/if}
-      </div>
-    </div>
-  </div>
-  <button on:click={handleGuessButton} disabled={!validInputs}>take a guess 🍌</button>
-  {#if prices.size != 0}
-    {#key [deviation, dateString, currency]}
-      <div class="result" in:scale={{ duration: 300, easing: quintOut }} out:scale={{ duration: 0 }}>
-        <div>
-          {#if deviation < 0}
-            Your guess was {-1 * deviation}% lower!
-          {:else if deviation > 0}
-            Your guess was {deviation}% higher!
-          {:else}
-            Congratulations, your guess was accurate!
+      <div class="error" />
+      <div class="date">
+        <label for="datepicker">pick a date and</label>
+        <div class="container">
+          <input bind:value={pickedDate} type="date" name="datepicker" min="2018-10-03" max={maxDate} />
+        </div>
+        <div class="error">
+          {#if new Date(pickedDate) > tomorrow || new Date(pickedDate) < birthday}
+            Pick a date from 2018-10-03 to now.
           {/if}
         </div>
-        <div>
-          According to
-          <img
-            src="https://static.coingecko.com/s/thumbnail-d5a7c1de76b4bc1332e48227dc1d1582c2c92721b5552aae76664eecb68345c9.png"
-            alt="coingecko"
-          />
-          <a href="https://www.coingecko.com/en/coins/banano">coingecko</a>, the price of
-          <img src="https://assets.coingecko.com/coins/images/6226/small/banano-transparent.png" alt="ban" /><a
-            href="https://www.banano.cc">Banano</a
-          >
-          on <b>{displayDate}</b> was
-          <b>
-            {#if currency == 'usd'}
-              {currencies.get(currency)}{prices.get(currency)}
-            {:else if currency == 'ban'}
-              {prices.get(currency)} {currencies.get(currency)}
-            {:else}
-              {prices.get(currency)} {currencies.get(currency)}
-            {/if}
-          </b>
+      </div>
+      <div class="guesser">
+        <label for="guess">guess the <span>ban</span> price!</label>
+        <div class="input-container">
+          <input bind:value={prediction} type="number" min="0" step="0.000001" class="guess" name="guess" />
+          <div class="symbol">{currencies.get(currency)}</div>
+        </div>
+        <div class="error">
+          {#if prediction < 0}
+            Enter positive numbers only.
+          {:else if prediction == 0}
+            ...but maybe try to put in some higher number.
+          {/if}
         </div>
       </div>
-    {/key}
-  {/if}
-</div>
+    </div>
+    <button on:click={handleGuessButton} disabled={!validInputs}>take a guess 🍌</button>
+    {#if prices.size != 0}
+      {#key [deviation, dateString, currency]}
+        <div class="result" in:scale={{ duration: 300, easing: quintOut }} out:scale={{ duration: 0 }}>
+          <div>
+            {#if deviation < 0}
+              Your guess was {-1 * deviation}% lower!
+            {:else if deviation > 0}
+              Your guess was {deviation}% higher!
+            {:else}
+              Congratulations, your guess was accurate!
+            {/if}
+          </div>
+          <div>
+            According to
+            <img
+              src="https://static.coingecko.com/s/thumbnail-d5a7c1de76b4bc1332e48227dc1d1582c2c92721b5552aae76664eecb68345c9.png"
+              alt="coingecko"
+            />
+            <a href="https://www.coingecko.com/en/coins/banano">coingecko</a>, the price of
+            <img src="https://assets.coingecko.com/coins/images/6226/small/banano-transparent.png" alt="ban" /><a
+              href="https://www.banano.cc">Banano</a
+            >
+            on <b>{displayDate}</b> was
+            <b>
+              {#if currency == 'usd'}
+                {currencies.get(currency)}{prices.get(currency)}
+              {:else if currency == 'ban'}
+                {prices.get(currency)} {currencies.get(currency)}
+              {:else}
+                {prices.get(currency)} {currencies.get(currency)}
+              {/if}
+            </b>
+          </div>
+        </div>
+      {/key}
+    {/if}
+  </div>
+{/if}
 
 <style lang="scss">
   .title {
