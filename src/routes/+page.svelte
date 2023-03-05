@@ -1,35 +1,48 @@
 <script lang="ts">
+  // Libraries
+  import { onMount } from 'svelte'
+  import type { SvelteComponent } from 'svelte'
+  import { BananoUtil } from '@bananocoin/bananojs'
+  // Assets
   import bananoLogo from '../assets/banano-icon.svg'
+  // Components
   import MonkeyAccount from '../MonkeyAccount.svelte'
   import AddressSearch from '../AddressSearch.svelte'
+  import MonkeyCard from '../MonkeyCard.svelte'
   import TransactionHistory from '../TransactionHistory.svelte'
-  import type { SvelteComponent } from 'svelte'
+  // Imports
+
+  let ready = false
+  onMount(() => (ready = true))
 
   const bananodeApi: string = 'https://kaliumapi.appditto.com/api'
   let account: string
   let transactionHistory: SvelteComponent
+
+  $: validAccount = (account: string) => {
+    if (account) account = account.trim()
+    return BananoUtil.getBananoAccountValidationInfo(account).valid
+  }
 </script>
 
-<div class="title">
-  <a href="https://banano.cc/" target="_blank" rel="noopener noreferrer">
+{#if ready}
+  <div class="title">
     <img src={bananoLogo} class="logo banano" alt="Banano Logo" />
-  </a>
-  <div>
-    <div>1 Ban = 1 Ban</div>
-    <div class="subtitle">did you know?</div>
+    <div>
+      <div class="subtitle">did you know?</div>
+      <div>1 Ban = 1 Ban</div>
+    </div>
+    <img src={bananoLogo} class="logo banano" alt="Banano Logo" />
   </div>
-  <a href="https://banano.cc/" target="_blank" rel="noopener noreferrer">
-    <img src={bananoLogo} class="logo banano" alt="Banano Logo" />
-  </a>
-</div>
 
-<MonkeyAccount {bananodeApi} />
-<AddressSearch bind:account {transactionHistory} />
-<TransactionHistory bind:this={transactionHistory} {bananodeApi} {account}/>
+  <MonkeyCard {account} {validAccount} />
+  <AddressSearch bind:account {transactionHistory} {validAccount} />
+  {#if transactionHistory}
+    <MonkeyAccount {bananodeApi} />
+  {/if}
+  <TransactionHistory bind:this={transactionHistory} {bananodeApi} />
+{/if}
 
-<!-- {account} -->
-
-<!-- todo gorilla banano card -->
 <style lang="scss">
   .subtitle {
     font-size: 0.6em;
@@ -44,7 +57,6 @@
     font-size: 1.2em;
     letter-spacing: 0.05em;
 
-
     .logo {
       width: 2.3em;
       padding: 1em;
@@ -52,12 +64,15 @@
     }
   }
 
-  // X-Small devices (portrait phones, less than 576px)
+  @media (min-width: 420px) {
+    .title {
+      font-size: 1.4em;
+    }
+  }
 
-  // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
     .title {
-      font-size: 2.5em;
+      font-size: 2em;
 
       .logo {
         width: 1.5em;
@@ -66,19 +81,18 @@
     }
   }
 
-  // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
+    .title {
+      font-size: 2.5em;
+    }
   }
 
-  // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
   }
 
-  // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
   }
 
-  // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
   }
 </style>

@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { dev } from '$app/environment'
+  // Libraries
   import { onMount } from 'svelte'
   import { quintOut } from 'svelte/easing'
   import { scale } from 'svelte/transition'
+  // Assets
+  // Components
+  // Imports
 
   let ready = false
 
@@ -330,7 +333,12 @@
     height: 0.75em;
   }
 
-  //
+  @media (min-width: 420px) {
+    .main {
+      font-size: 1.6em;
+    }
+  }
+
   @media (min-width: 576px) {
     .main {
       font-size: 1.7em;
@@ -340,21 +348,18 @@
     }
   }
 
-  // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
     .main {
       font-size: 1.9em;
     }
   }
 
-  // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
     .main {
       font-size: 2em;
     }
   }
 
-  // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
     .main {
       font-size: 2em;
@@ -367,7 +372,6 @@
     }
   }
 
-  // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
     .main {
       font-size: 2em;

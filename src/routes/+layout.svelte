@@ -1,20 +1,24 @@
 <script>
-  import "../app.scss";
-  import { page } from "$app/stores";
+  // Libraries
+  import { page } from '$app/stores'
+  // Assets
+  import '../app.scss'
+  // Components
+  // Imports
 
-  console.log($page.route.id);
+  console.log($page.route.id)
 
   const nav = [
-    { title: "Home", path: "/" },
-    { title: "Birthday", path: "/birthday" },
-    { title: "Seed", path: "/seed" },
-    { title: "Price", path: "/price" },
-  ];
+    { title: 'Home', path: '/' },
+    { title: 'Birthday', path: '/birthday' },
+    { title: 'Seed', path: '/seed' },
+    { title: 'Price', path: '/price' },
+  ]
 </script>
 
 <nav>
   {#each nav as item}
-    <a rel='external' href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
+    <a rel="external" href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
   {/each}
 </nav>
 
@@ -45,7 +49,7 @@
     }
 
     a::before {
-      content: "";
+      content: '';
       position: absolute;
       display: block;
       width: 100%;
@@ -62,7 +66,7 @@
       transform: scaleX(1);
     }
 
-    .active{
+    .active {
       color: $ban-y;
     }
     // TODO
@@ -74,6 +78,12 @@
       transform: scaleX(1);
       background-color: $ban-y;
       color: $ban-y;
+    }
+  }
+
+  @media (min-width: 420px) {
+    nav {
+      font-size: 1.8em;
     }
   }
 

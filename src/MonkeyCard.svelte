@@ -1,5 +1,11 @@
 <script lang="ts">
-  let account: string = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
+  // Libraries
+  // Assets
+  // Components
+  import QrCodeImage from 'svelte-qrcode-image/QRCodeImage.svelte'
+  // Imports
+  export let account: string
+  export let validAccount: Function
 </script>
 
 <div class="front">
@@ -21,7 +27,16 @@
 <div class="back">
   <div class="banana">
     <div class="box">
-      <div class="qr" />
+      <QrCodeImage
+        displayStyle="width: 95%;"
+        text={validAccount(account)
+          ? 'ban:' + account
+          : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
+        altText={validAccount(account)
+          ? 'ban:' + account
+          : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
+        margin={2}
+      />
     </div>
   </div>
   <div class="subtitle">Scan to transfer</div>
@@ -130,25 +145,32 @@
         display: flex;
         align-items: center;
         justify-content: center;
-
-        .qr {
-          background: url(public/qr.png) center no-repeat;
-          background-size: 6.8em;
-          width: 7em;
-          height: 7em;
-        }
       }
+    }
+  }
+
+  @media (min-width: 420px) {
+    .front,
+    .back {
+      font-size: 1.25em;
     }
   }
 
   @media (min-width: 576px) {
     .front,
     .back {
-      font-size: 1.8em;
+      font-size: 1.4em;
     }
   }
 
   @media (min-width: 768px) {
+    .front,
+    .back {
+      font-size: 1.7em;
+    }
+  }
+
+  @media (min-width: 992px) {
     .front,
     .back {
       font-size: 2em;

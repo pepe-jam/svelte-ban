@@ -25,6 +25,7 @@
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "bananojs": "^0.0.4",
     "https-browserify": "^1.0.0",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "svelte-qrcode-image": "^1.0.0-rc.2"
   }
 }

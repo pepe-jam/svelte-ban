@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { quintIn } from 'svelte/easing'
-  import { fade, slide } from 'svelte/transition'
-  import { Main } from '@bananocoin/bananojs'
+  // Libraries
   import { onMount } from 'svelte'
+  import { fade } from 'svelte/transition'
+  import { Main } from '@bananocoin/bananojs'
+  // Assets
+  // Components
+  // Imports
 
   let ready = false
   onMount(() => (ready = true))

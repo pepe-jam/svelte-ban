@@ -1,6 +1,10 @@
 <script lang="ts">
+  // Libraries
   import { fly } from 'svelte/transition'
   import { onMount } from 'svelte'
+  // Assets
+  // Components
+  // Imports
 
   let ready = false
   onMount(() => (ready = true))
@@ -195,9 +199,12 @@
     }
   }
 
-  // X-Small devices (portrait phones, less than 576px)
+  @media (min-width: 420px) {
+    .birthday {
+      font-size: 0.8em;
+    }
+  }
 
-  // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
     .birthday {
       font-size: 0.6em;
@@ -244,7 +251,6 @@
     }
   }
 
-  // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
     .birthday {
       font-size: 0.7em;
@@ -256,7 +262,6 @@
     }
   }
 
-  // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
     .birthday {
       font-size: 0.85em;
@@ -266,14 +271,12 @@
     }
   }
 
-  // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
     .birthday {
       font-size: 1em;
     }
   }
 
-  // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
     .birthday {
       font-size: 1.2em;

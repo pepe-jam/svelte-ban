@@ -2,7 +2,7 @@
   export let bananodeApi: string
 
   let account = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
-  let promise: Promise<string|undefined>
+  let promise: Promise<string | undefined>
 
   async function getBalance(account: string) {
     const req = {
@@ -24,11 +24,6 @@
       console.error(error)
     }
   }
-
-  function handleClick() {
-    promise = getBalance(account)
-  }
-
 </script>
 
 <div class="account">
@@ -49,8 +44,6 @@
   <a href="https://creeper.banano.cc/account/{account}" target="_blank" rel="noreferrer">
     <img src="https://monkey.banano.cc/api/v1/monkey/{account}" alt="monkey avatar" />
   </a>
-    <!-- <button on:click={handleClick}>Update Balance</button> -->
-
 </div>
 
 <style lang="scss">
@@ -58,8 +51,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    font-size: 0.7em;
+    font-size: 0.8em;
     margin-top: 1.5em;
+    padding: 0 0.7em;
     word-break: break-all;
 
     div {
@@ -78,14 +72,17 @@
       height: 10em;
     }
   }
-  // X-Small devices (portrait phones, less than 576px)
+  @media (min-width: 420px) {
+    .account {
+      font-size: 1em;
+    }
+  }
 
-  // Small devices (landscape phones, 576px and up)
   @media (min-width: 576px) {
     .account {
       font-size: 1.15em;
       margin-top: 1.5em;
-      padding: 0.3em;
+      padding: 0 1.5em;
 
       div {
         gap: 0.5em;
@@ -98,12 +95,10 @@
     }
   }
 
-  // Medium devices (tablets, 768px and up)
   @media (min-width: 768px) {
     .account {
       font-size: 1.4em;
       margin-top: 1.5em;
-      padding: 1.5em;
 
       div {
         .balance {
@@ -113,25 +108,21 @@
     }
   }
 
-  // Large devices (desktops, 992px and up)
   @media (min-width: 992px) {
     .account {
-      font-size: 1.5em;
+      font-size: 1.1em;
     }
   }
 
-  // X-Large devices (large desktops, 1200px and up)
   @media (min-width: 1200px) {
     .account {
-      font-size: 1.5em;
-      padding: 0.5em 3em;
+      font-size: 1.35em;
     }
   }
 
-  // XX-Large devices (larger desktops, 1400px and up)
   @media (min-width: 1400px) {
     .account {
-      font-size: 1.8em;
+      font-size: 1.6em;
     }
   }
 </style>

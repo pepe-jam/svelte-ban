@@ -24,7 +24,7 @@
       account: account,
       count: 5,
     }
-    console.log(req)
+
     const options = {
       method: 'POST',
       headers: {
@@ -36,7 +36,6 @@
     try {
       const response = await fetch(bananodeApi, options)
       history = (await response.json()).history
-      console.log(history)
     } catch (error) {
       console.error(error)
     }
@@ -47,7 +46,7 @@
   <!-- add working animation on update pliz -->
   <div class="history" transition:fade>
     <div class="transactions">
-      <h2>recent transactions</h2>
+      <div class="title">recent transactions</div>
       {#each history as t}
         <div class="transaction">
           {#if t.type == 'send'}
@@ -65,11 +64,6 @@
         </div>
       {/each}
     </div>
-    <!-- <div class="monkey">
-      <a href="https://creeper.banano.cc/account/{urlAccount}" target="_blank" rel="noreferrer">
-        <img src="https://monkey.banano.cc/api/v1/monkey/{urlAccount}" alt="monkey avatar" />
-      </a>
-    </div> -->
   </div>
 {/if}
 
@@ -82,6 +76,12 @@
     flex-direction: column;
     font-size: 0.8em;
     word-break: break-all;
+    padding: 0 0.7em;
+
+    .title {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+    }
 
     .transaction {
       margin-bottom: 0.5em;
@@ -95,6 +95,43 @@
 
     img {
       width: 20em;
+    }
+  }
+
+  @media (min-width: 420px) {
+    .history {
+      font-size: 1.15em;
+    }
+  }
+
+  @media (min-width: 576px) {
+    .history {
+      font-size: 1.3em;
+      padding: 0 1.5em;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .history {
+      font-size: 1.1em;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .history {
+      font-size: 1.4em;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .history {
+      font-size: 1.5em;
+    }
+  }
+
+  @media (min-width: 1400px) {
+    .history {
+      font-size: 1.6em;
     }
   }
 </style>

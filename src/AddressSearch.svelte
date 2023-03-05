@@ -1,17 +1,16 @@
 <script lang="ts">
+  // Libraries
   import type { SvelteComponent } from 'svelte'
-  import { BananoUtil } from '@bananocoin/bananojs'
-
+  // Assets
+  // Components
+  // Imports
   export let account: string = ''
   export let transactionHistory: SvelteComponent
-
-  $: validAccount = () => {
-    return BananoUtil.getBananoAccountValidationInfo(account.trim()).valid
-  }
+  export let validAccount: Function
 
   function handleHistoryButton() {
     account = account.trim()
-    if (validAccount()) {
+    if (validAccount(account)) {
       transactionHistory.getAccountHistory(account)
     }
   }
@@ -19,13 +18,19 @@
 
 <div class="search">
   <label for="input">enter banano address</label>
-  <input bind:value={account} type="text" name="input" placeholder="ban_1waifu..." />
-  {#if !validAccount() && account !== ''}
+  <input
+    bind:value={account}
+    on:input={() => (account = account.trim())}
+    type="text"
+    name="input"
+    placeholder="ban_1waifu..."
+  />
+  {#if !validAccount(account) && account !== ''}
     <div class="error">Invalid banano address.</div>
   {:else}
-    <div class="error"/>
+    <div class="error" />
   {/if}
-  <button on:click={handleHistoryButton} disabled={!validAccount()}>get history</button>
+  <button on:click={handleHistoryButton} disabled={!validAccount(account)}>get history</button>
 </div>
 
 <style lang="scss">
