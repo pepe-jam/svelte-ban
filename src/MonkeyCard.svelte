@@ -8,6 +8,11 @@
   export let validAccount: Function
 </script>
 
+<div class="instruction">
+  <div>&gt enter your address to put it on your monkey card</div>
+  <div>&gt print it with the upcoming button (pog)</div>
+  <div>&gt scan it to send nanners easier in the wild jungle</div>
+</div>
 <div class="front">
   <div class="left">
     <img src="./../public/gorilla.png" alt="gorilla" />
@@ -47,6 +52,15 @@
     font-family: monospace;
     font-size: 1em;
     user-select: none;
+  }
+  .instruction {
+    margin-top: 2em;
+    font-size: 0.8em;
+    width: 29em;
+
+    div {
+      margin: 0.75em 0;
+    }
   }
 
   .front {
@@ -154,12 +168,19 @@
     .back {
       font-size: 1.25em;
     }
+    .instruction {
+      font-size: 1.05em;
+    }
   }
 
   @media (min-width: 576px) {
     .front,
     .back {
       font-size: 1.4em;
+    }
+
+    .instruction {
+      font-size: 1.2em;
     }
   }
 
@@ -168,12 +189,20 @@
     .back {
       font-size: 1.7em;
     }
+
+    .instruction {
+      font-size: 1.5em;
+    }
   }
 
   @media (min-width: 992px) {
     .front,
     .back {
       font-size: 2em;
+    }
+
+    .instruction {
+      font-size: 1.6em;
     }
   }
 </style>
