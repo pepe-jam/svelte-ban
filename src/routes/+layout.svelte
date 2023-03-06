@@ -6,7 +6,7 @@
   // Components
   // Imports
 
-  console.log($page.route.id)
+  // console.log($page.route.id)
 
   const nav = [
     { title: 'Home', path: '/' },
