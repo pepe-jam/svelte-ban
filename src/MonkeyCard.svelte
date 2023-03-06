@@ -30,6 +30,7 @@
 </div>
 
 <div class="back">
+  <div class="subtitle-top">Consider contributing your GPU to scientific research:<br/>Learn more on <a href="https://bananominer.com">bananominer.com</a></div>
   <div class="banana">
     <div class="box">
       <QrCodeImage
@@ -44,7 +45,7 @@
       />
     </div>
   </div>
-  <div class="subtitle">Scan to transfer</div>
+  <div class="subtitle-bottom">Scan to transfer</div>
 </div>
 
 <style lang="scss">
@@ -81,10 +82,12 @@
       flex-direction: column;
       font-size: 0.6em;
       gap: 0.5em;
+      width: 45em;
+      padding-left: 0.75em;
 
       img {
-        max-width: 70%;
-        max-height: 70%;
+        max-width:85%;
+        max-height: 85%;
       }
     }
 
@@ -93,9 +96,10 @@
       flex-direction: column;
       align-self: flex-start;
       text-align: right;
-      gap: 5em;
+      gap: 3.5em;
 
       .top {
+        margin-top: 0.25em;
         flex-direction: column;
 
         .title {
@@ -104,10 +108,9 @@
         }
 
         .subtitle {
-          font-size: 0.7em;
+          font-size: 0.9em;
           color: $ban-gray;
           padding-top: 1.5em;
-          max-width: 10em;
         }
       }
 
@@ -135,11 +138,25 @@
     font-size: 1em;
     filter: drop-shadow(4px 4px 1px $ban-gray);
 
-    .subtitle {
-      font-size: 0.7em;
+    .subtitle-top {
+      font-size: 0.65em;
+      padding: 0;
       color: $ban-gray;
-      padding: 1em 4em;
       text-align: left;
+      align-self: flex-start;
+      margin-bottom: 1.5em;
+      
+      a {
+        color: inherit;
+      }
+    }
+
+    .subtitle-bottom {
+      font-size: 0.8em;
+      color: $ban-gray;
+      padding: 0.75em 3.2em;
+      align-self: center;
+      text-align: right;
       align-self: flex-start;
     }
 
