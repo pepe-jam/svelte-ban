@@ -1,5 +1,6 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import basicSsl from '@vitejs/plugin-basic-ssl'
+import { fileURLToPath, URL } from 'node:url'
 
 /** @type {import('vite').UserConfig} */
 const config = {
@@ -11,6 +12,12 @@ const config = {
       allow: [".."],
     },
     https: true,
+  },
+
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
   },
 
   css: {
