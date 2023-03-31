@@ -1,7 +1,12 @@
 <script lang="ts">
+  // Libraries
   import { fade } from 'svelte/transition'
+  // Assets
+  // Components
+  // Imports
 
   export let bananodeApi: string
+  export let validAccount: Function
 
   interface BananoTransaction {
     account: string
@@ -18,6 +23,8 @@
   let urlAccount: string
 
   export async function getAccountHistory(account: string) {
+    if (!validAccount(account)) return
+
     urlAccount = account
     const req = {
       action: 'account_history',
@@ -68,6 +75,12 @@
 {/if}
 
 <style lang="scss">
+  @media print {
+    * {
+      display: none !important;
+    }
+  }
+  
   .history {
     display: flex;
     flex-flow: row;

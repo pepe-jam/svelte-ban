@@ -37,15 +37,33 @@
     </div>
 
     <AddressSearch bind:account {transactionHistory} {validAccount} />
-    {#if transactionHistory}
-      <MonkeyAccount {bananodeApi} />
+    {#if validAccount(account)}
+      {#if transactionHistory}
+        <MonkeyAccount {bananodeApi} />
+      {/if}
+      <TransactionHistory bind:this={transactionHistory} {bananodeApi} {validAccount} />
     {/if}
-    <TransactionHistory bind:this={transactionHistory} {bananodeApi} />
     <MonkeyCard {account} {validAccount} />
   {/if}
 </div>
 
 <style lang="scss">
+  @media print {
+    :global(body) {
+      background-color: #fff !important;
+    }
+
+    .title {
+      display: none !important;
+    }
+
+    .container {
+      align-items: flex-start !important;
+      background-color: #fff !important;
+      
+    }
+  }
+
   .container {
     display: flex;
     flex-direction: column;

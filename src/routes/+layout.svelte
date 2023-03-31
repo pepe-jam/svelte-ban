@@ -25,6 +25,12 @@
 <slot />
 
 <style lang="scss">
+  @media print {
+    * {
+      display: none !important;
+    }
+  }
+  
   nav {
     font-size: 1.4em;
     text-align: center;
