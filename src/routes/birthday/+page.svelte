@@ -81,11 +81,11 @@
               {#each digit.value as number}
                 {#key number}
                   {#if ((digit.value[0] == 1 && digit.value[1] == 9) || (digit.value[1] == 1 && digit.value[2] == 9)) && (number == 1 || number == 9)}
-                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }}
+                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 0 }}
                       >{@html "<span style='color: #fbdd11'>" + number + '</span>'}</span
                     >
                   {:else}
-                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }}>{number}</span>
+                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 0 }}>{number}</span>
                   {/if}
                 {/key}
               {/each}
