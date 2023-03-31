@@ -3,8 +3,8 @@
 @font-face {
   font-family: "filson-pro";
   font-weight: 500;
-  src: url("../public/fonts/filson-pro-500.woff2") format("woff2"),
-    url("../public/fonts/filson-pro-500.woff") format("woff");
+  src: url("./assets/fonts/filson-pro-500.woff2") format("woff2"),
+    url("./assets/fonts/filson-pro-500.woff") format("woff");
   font-display: block;
   font-style: normal;
 }
@@ -40,13 +40,12 @@ a {
 
 button {
   align-self: center;
-  width: 8em;
   font-size: 1em;
   color: #fff;
   background: $ban-gray;
   border: 3px solid #fff;
   border-radius: 0.5em;
-  padding: 0.5em;
+  padding: 0.3em 0.5em;
   // margin-top: 1em;
   cursor: pointer;
 }

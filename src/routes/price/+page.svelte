@@ -1,11 +1,7 @@
 <script lang="ts">
-  // Libraries
   import { onMount } from 'svelte'
   import { quintOut } from 'svelte/easing'
   import { scale } from 'svelte/transition'
-  // Assets
-  // Components
-  // Imports
 
   let ready = false
 

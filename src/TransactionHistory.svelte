@@ -1,9 +1,5 @@
 <script lang="ts">
-  // Libraries
   import { fade } from 'svelte/transition'
-  // Assets
-  // Components
-  // Imports
 
   export let bananodeApi: string
   export let validAccount: Function
@@ -104,10 +100,6 @@
           color: $ban-y;
         }
       }
-    }
-
-    img {
-      width: 20em;
     }
   }
 

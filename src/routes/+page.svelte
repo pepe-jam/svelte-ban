@@ -1,16 +1,15 @@
 <script lang="ts">
-  // Libraries
   import { onMount } from 'svelte'
   import type { SvelteComponent } from 'svelte'
   import { BananoUtil } from '@bananocoin/bananojs'
-  // Assets
-  import bananoLogo from '../assets/banano-icon.svg'
-  // Components
+
+  import bananoLogo from '@/assets/banano-icon.svg'
+
   import MonkeyAccount from '../MonkeyAccount.svelte'
   import AddressSearch from '../AddressSearch.svelte'
   import MonkeyCard from '../MonkeyCard.svelte'
   import TransactionHistory from '../TransactionHistory.svelte'
-  // Imports
+  
 
   let ready = false
   onMount(() => (ready = true))
@@ -38,9 +37,7 @@
 
     <AddressSearch bind:account {transactionHistory} {validAccount} />
     {#if validAccount(account)}
-      {#if transactionHistory}
-        <MonkeyAccount {bananodeApi} />
-      {/if}
+      <MonkeyAccount {account} {bananodeApi} />
       <TransactionHistory bind:this={transactionHistory} {bananodeApi} {validAccount} />
     {/if}
     <MonkeyCard {account} {validAccount} />
@@ -60,7 +57,6 @@
     .container {
       align-items: flex-start !important;
       background-color: #fff !important;
-      
     }
   }
 

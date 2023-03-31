@@ -1,52 +1,64 @@
 <script lang="ts">
-  // Libraries
-  // Assets
-  // Components
+  import { fade, fly } from 'svelte/transition'
+
   import QrCodeImage from 'svelte-qrcode-image/QRCodeImage.svelte'
-  // Imports
+
+  import gorilla from '@/assets/gorilla.png'
+  import banano_gold from '@/assets/banano-gold.svg'
+
   export let account: string
   export let validAccount: Function
+
 </script>
 
-<div class="instruction">
-  <div>&gt enter your address to put it on your monkey card</div>
-  <div>&gt print it with the upcoming button (pog)</div>
-  <div>&gt scan it to send nanners easier in the wild jungle</div>
-</div>
-<div class="front">
-  <div class="left">
-    <img src="./../public/gorilla.png" alt="gorilla" />
-    <div class="subtitle">Instant, Feeless & Potassium Rich</div>
-  </div>
-  <div class="right">
-    <div class="top">
-      <div class="title">BANANO.CC</div>
-      <div class="subtitle">Folding proteins in the name of science</div>
+{#key account}
+  <div class="card" in:fly={{ duration: 200, y: 500, delay: 400}} out:fly={{ duration: 300, y: 1000 }}>
+    <div class="instruction">
+      <div>&gt enter your address to put on your monkey card</div>
+      <div>&gt print it</div>
+      <div>&gt scan it to send nanners easier in the wild jungle</div>
     </div>
-    <div class="bottom">
-      <img src="./../public/banano-gold.svg" alt="banano" />
+    <div class="front">
+      <div class="left">
+        <img src={gorilla} alt="gorilla" />
+        <div class="subtitle">Instant, Feeless & Potassium Rich</div>
+      </div>
+      <div class="right">
+        <div class="top">
+          <div class="title">BANANO.CC</div>
+          <div class="subtitle">Folding proteins in the name of science</div>
+        </div>
+        <div class="bottom">
+          <img src={banano_gold} alt="banano" />
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="back">
-  <div class="subtitle-top">Consider contributing your GPU to scientific research:<br/>Learn more on <a href="https://bananominer.com">bananominer.com</a></div>
-  <div class="banana">
-    <div class="box">
-      <QrCodeImage
-        displayStyle="width: 95%;"
-        text={validAccount(account)
-          ? 'ban:' + account
-          : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
-        altText={validAccount(account)
-          ? 'ban:' + account
-          : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
-        margin={2}
-      />
+    <div class="back">
+      <div class="subtitle-top">
+        Consider contributing your GPU to scientific research<br />Learn more on
+        <a href="https://bananominer.com">bananominer.com</a>
+      </div>
+      <div class="banana">
+        <div class="box">
+          <QrCodeImage
+            displayStyle="width: 95%;"
+            text={validAccount(account)
+              ? 'ban:' + account
+              : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
+            altText={validAccount(account)
+              ? 'ban:' + account
+              : 'ban_HereCouldBeYourAmazingBananoAddressIfYouWouldPutItInNowThanks'}
+            margin={2}
+          />
+        </div>
+      </div>
+      <div class="subtitle-bottom">Scan to transfer</div>
     </div>
   </div>
-  <div class="subtitle-bottom">Scan to transfer</div>
-</div>
+{/key}
+
+<button on:click={() => window.print()}>print card</button>
 
 <style lang="scss">
   * {
@@ -54,6 +66,19 @@
     font-size: 1em;
     user-select: none;
   }
+  @media print {
+    .instruction,
+    button {
+      display: none;
+    }
+
+    .front,
+    .back {
+      filter: none !important;
+      text-align: left;
+    }
+  }
+
   .instruction {
     margin-top: 2em;
     font-size: 0.8em;
@@ -86,7 +111,7 @@
       padding-left: 0.75em;
 
       img {
-        max-width:85%;
+        max-width: 85%;
         max-height: 85%;
       }
     }
@@ -145,7 +170,7 @@
       text-align: left;
       align-self: flex-start;
       margin-bottom: 1.5em;
-      
+
       a {
         color: inherit;
       }
@@ -161,7 +186,7 @@
     }
 
     .banana {
-      background: url(public/banano-gold.svg) center no-repeat;
+      background: url(assets/banano-gold.svg) center no-repeat;
       width: 15em;
       height: 30em;
       display: flex;
@@ -178,6 +203,11 @@
         justify-content: center;
       }
     }
+  }
+
+  button {
+    margin-top: 2em;
+    font-family: Filson-Pro;
   }
 
   @media (min-width: 420px) {

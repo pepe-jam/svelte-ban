@@ -1,10 +1,8 @@
 <script lang="ts">
-  // Libraries
   import { fly } from 'svelte/transition'
   import { onMount } from 'svelte'
-  // Assets
-  // Components
-  // Imports
+
+  import chibi from '@/assets/chibi.webp'
 
   let ready = false
   onMount(() => (ready = true))
@@ -40,9 +38,9 @@
 
     function setTimer(timeLeft: number) {
       let days: any = Math.floor(timeLeft / (1000 * 60 * 60 * 24)).toString()
-      let hours: any = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0')
-      let minutes: any = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0')
-      let seconds: any = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0')
+      let hours: any = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0')
+      let minutes: any = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0')
+      let seconds: any = Math.floor((timeLeft % (1000 * 60)) / 1000).toString().padStart(2, '0')
 
       _digits[0].value = []
       for (const digit in days) {
@@ -124,9 +122,9 @@
       <p class="subtitle">left until its next big birthday party is starting!</p>
     {/if}
     <div class="chibi">
-      <img src="../../public/chibi.webp" alt="happy chibi" />
-      <img src="../../public/chibi.webp" alt="happy chibi" />
-      <img src="../../public/chibi.webp" alt="happy chibi" />
+      <img src={chibi} alt="happy chibi" />
+      <img src={chibi} alt="happy chibi" />
+      <img src={chibi} alt="happy chibi" />
     </div>
   </div>
 {/if}

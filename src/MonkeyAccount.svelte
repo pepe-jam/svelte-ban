@@ -1,8 +1,10 @@
 <script lang="ts">
+  import { fade } from 'svelte/transition'
+
   export let bananodeApi: string
 
-  let account = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
-  let promise: Promise<string | undefined>
+  export let account: string = 'ban_1waifusa1tnk3eo7dstc4z9tt7puurh5jyettyj59mis5m86ofiwywahcccm'
+  let promise: Promise<string | undefined> = getBalance(account)
 
   async function getBalance(account: string) {
     const req = {
@@ -26,7 +28,7 @@
   }
 </script>
 
-<div class="account">
+<div class="account" transition:fade>
   <div>
     <div class="address">
       {account}
@@ -47,6 +49,13 @@
 </div>
 
 <style lang="scss">
+
+@media print {
+    * {
+      display: none !important;
+    }
+  }
+  
   .account {
     display: flex;
     flex-direction: row;
@@ -70,6 +79,7 @@
 
     img {
       height: 10em;
+      user-select: none;
     }
   }
   @media (min-width: 420px) {

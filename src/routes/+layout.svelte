@@ -1,10 +1,7 @@
 <script>
-  // Libraries
   import { page } from '$app/stores'
-  // Assets
+
   import '../app.scss'
-  // Components
-  // Imports
 
   // console.log($page.route.id)
 
@@ -13,12 +10,13 @@
     { title: 'Birthday', path: '/birthday' },
     { title: 'Seed', path: '/seed' },
     { title: 'Price', path: '/price' },
+    { title: 'Gallery', path: '/gallery' },
   ]
 </script>
 
 <nav>
-  {#each nav as item}
-    <a rel="external" href={item.path} class:active={$page.route.id === item.path}>{item.title}</a>
+  {#each nav as item, i}
+    <a rel="external" href={item.path} class:active={$page.route.id === item.path} tabindex={i+1}>{item.title}</a>
   {/each}
 </nav>
 
