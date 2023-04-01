@@ -5,6 +5,9 @@
   import { Confetti } from 'svelte-confetti'
 
   import chibi from '@/assets/chibi.webp'
+  import ToggleConfetti from '@/ToggleConfetti.svelte'
+  import banano_gold from '@/assets/banano-gold.svg'
+
 
   let ready = false
   onMount(() => (ready = true))
@@ -80,7 +83,16 @@
     {/if}
     {#if bdToday}
       <div class="full-confetti">
-        <Confetti x={[-5, 5]} y={[0, 0.1]} delay={[1500, 2500]} infinite duration="20000" amount="123" fallDistance="100vh" />
+        <Confetti
+          x={[-5, 5]}
+          y={[0, 0.1]}
+          delay={[1000, 2000]}
+          size=15
+          infinite
+          duration="20000"
+          amount="123"
+          fallDistance="100vh"
+        />
       </div>
       <div class="countdown">
         {#each _digits.slice(1) as digit}
@@ -135,12 +147,22 @@
     <div class="chibi-confetti">
       <div class="confetti">
         {#each Array(3) as _, i}
-          <Confetti cone delay={[2000, 2000]} />
+          <div class="">
+            <Confetti cone delay={[2000, 2000]} x={[-0.5, 0.5]} />
+            <Confetti cone delay={[2000, 2000]} amount="10" x={[-0.75, -0.4]} y={[0.15, 0.75]} />
+            <Confetti cone delay={[2000, 2000]} amount="10" x={[0.4, 0.75]} y={[0.15, 0.75]} />
+          </div>
         {/each}
       </div>
       <div class="chibis">
         {#each Array(3) as _, i}
-          <img src={chibi} alt="happy chibi" />
+           <ToggleConfetti>
+            <!--  -->
+            <button slot="label"><img src={chibi} alt="happy chibi" /></button>
+            <Confetti cone x={[-0.5, 0.5]} />
+            <Confetti cone amount="10" x={[-1, -0.4]} y={[0.25, 0.75]} />
+            <Confetti cone amount="10" x={[0.4, 1]} y={[0.25, 0.75]} />
+          </ToggleConfetti>
         {/each}
       </div>
     </div>
@@ -195,6 +217,11 @@
         flex-direction: row;
         justify-content: center;
         gap: 0 5em;
+
+        button {
+          background: unset;
+          border: unset;
+        }
 
         img {
           width: 5em;
