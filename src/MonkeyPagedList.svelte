@@ -8,7 +8,6 @@
   export let addresses: string[] = []
   export let currentPage: number = 1
   export let addressesPerPage: number = 5
-  export let newElements: string[]
 
   let amount = addressesPerPage
 
@@ -143,16 +142,12 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    font-size: 1.2em;
+    font-size: 1em;
 
     button {
       margin-top: 1em;
       font-size: 0.9em;
     }
-  }
-
-  h4 {
-    margin: 0.2em;
   }
 
   .addresses {
@@ -265,7 +260,6 @@
 
   @media (min-width: 420px) {
     .main {
-      font-size: 1.6em;
       .addresses {
         .list {
           height: 21.3em;
@@ -284,7 +278,6 @@
 
   @media (min-width: 576px) {
     .main {
-      font-size: 1.6em;
 
       .addresses {
         .list {
@@ -311,7 +304,6 @@
 
   @media (min-width: 768px) {
     .main {
-      font-size: 1.9em;
 
       .addresses {
         .list {
@@ -332,7 +324,7 @@
 
   @media (min-width: 992px) {
     .main {
-      font-size: 1.85em;
+      font-size: 1.15em;
       .addresses {
         .list {
           width: 26em;
@@ -355,10 +347,6 @@
   @media (min-width: 1400px) {
     .main {
       font-size: 1.15em;
-
-      h4 {
-        font-size: 1.85em;
-      }
 
       button {
         font-size: 1.3em;

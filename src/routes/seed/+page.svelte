@@ -151,6 +151,10 @@
     .generator {
       font-size: 1.15em;
 
+      h4 {
+        font-size: 1.7em;
+      }
+
       .seed {
         font-size: 1.3em;
       }
