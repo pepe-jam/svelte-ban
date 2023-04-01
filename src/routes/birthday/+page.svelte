@@ -2,6 +2,8 @@
   import { fly } from 'svelte/transition'
   import { onMount } from 'svelte'
 
+  import { Confetti } from 'svelte-confetti'
+
   import chibi from '@/assets/chibi.webp'
 
   let ready = false
@@ -38,9 +40,15 @@
 
     function setTimer(timeLeft: number) {
       let days: any = Math.floor(timeLeft / (1000 * 60 * 60 * 24)).toString()
-      let hours: any = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0')
-      let minutes: any = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0')
-      let seconds: any = Math.floor((timeLeft % (1000 * 60)) / 1000).toString().padStart(2, '0')
+      let hours: any = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        .toString()
+        .padStart(2, '0')
+      let minutes: any = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
+        .toString()
+        .padStart(2, '0')
+      let seconds: any = Math.floor((timeLeft % (1000 * 60)) / 1000)
+        .toString()
+        .padStart(2, '0')
 
       _digits[0].value = []
       for (const digit in days) {
@@ -71,6 +79,9 @@
       <p class="subtitle">that means there are</p>
     {/if}
     {#if bdToday}
+      <div class="full-confetti">
+        <Confetti x={[-5, 5]} y={[0, 0.1]} delay={[1500, 2500]} infinite duration="20000" amount="123" fallDistance="100vh" />
+      </div>
       <div class="countdown">
         {#each _digits.slice(1) as digit}
           {#if digit.label != 'hours'}
@@ -81,11 +92,11 @@
               {#each digit.value as number}
                 {#key number}
                   {#if ((digit.value[0] == 1 && digit.value[1] == 9) || (digit.value[1] == 1 && digit.value[2] == 9)) && (number == 1 || number == 9)}
-                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 0 }}
+                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 1 }}
                       >{@html "<span style='color: #fbdd11'>" + number + '</span>'}</span
                     >
                   {:else}
-                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 0 }}>{number}</span>
+                    <span in:fly={{ y: -50, duration: 1000, opacity: 0.1 }} out:fly={{ duration: 1 }}>{number}</span>
                   {/if}
                 {/key}
               {/each}
@@ -121,10 +132,17 @@
       </div>
       <p class="subtitle">left until its next big birthday party is starting!</p>
     {/if}
-    <div class="chibi">
-      <img src={chibi} alt="happy chibi" />
-      <img src={chibi} alt="happy chibi" />
-      <img src={chibi} alt="happy chibi" />
+    <div class="chibi-confetti">
+      <div class="confetti">
+        {#each Array(3) as _, i}
+          <Confetti cone delay={[2000, 2000]} />
+        {/each}
+      </div>
+      <div class="chibis">
+        {#each Array(3) as _, i}
+          <img src={chibi} alt="happy chibi" />
+        {/each}
+      </div>
     </div>
   </div>
 {/if}
@@ -147,16 +165,42 @@
       margin-bottom: 0;
     }
 
-    .chibi {
-      margin-top: 2em;
+    .full-confetti {
+      position: fixed;
+      top: -50px;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
       display: flex;
-      align-self: center;
-      gap: 5em;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: none;
+    }
 
-      img {
-        width: 5em;
-        vertical-align: middle;
-        align-self: center;
+    .chibi-confetti {
+      margin-top: 2em;
+      place-items: center;
+      justify-content: center;
+
+      .confetti {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0 10em;
+        height: 0.3em;
+      }
+
+      .chibis {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0 5em;
+
+        img {
+          width: 5em;
+          vertical-align: middle;
+          align-self: center;
+        }
       }
     }
 
@@ -218,7 +262,7 @@
         margin-top: 0.5em;
       }
 
-      .chibi {
+      .chibi-confetti {
         margin-top: 2em;
         gap: 5em;
         user-select: none;
