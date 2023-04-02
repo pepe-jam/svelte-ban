@@ -4,10 +4,9 @@
 
   import { Confetti } from 'svelte-confetti'
 
-  import chibi from '@/assets/chibi.webp'
+  import BoopAction from '@/boop/BoopAction.svelte'
   import ToggleConfetti from '@/ToggleConfetti.svelte'
-  import banano_gold from '@/assets/banano-gold.svg'
-
+  import chibi from '@/assets/chibi.webp'
 
   let ready = false
   onMount(() => (ready = true))
@@ -87,7 +86,7 @@
           x={[-5, 5]}
           y={[0, 0.1]}
           delay={[1000, 2000]}
-          size=15
+          size="15"
           infinite
           duration="20000"
           amount="123"
@@ -145,24 +144,38 @@
       <p class="subtitle">left until its next big birthday party is starting!</p>
     {/if}
     <div class="chibi-confetti">
-      <div class="confetti">
-        {#each Array(3) as _, i}
-          <div class="">
-            <Confetti cone delay={[2000, 2000]} x={[-0.5, 0.5]} />
-            <Confetti cone delay={[2000, 2000]} amount="10" x={[-0.75, -0.4]} y={[0.15, 0.75]} />
-            <Confetti cone delay={[2000, 2000]} amount="10" x={[0.4, 0.75]} y={[0.15, 0.75]} />
-          </div>
-        {/each}
-      </div>
+      {#if bdToday}
+        <div class="confetti">
+          {#each Array(3) as _, i}
+            <div class="">
+              <Confetti cone delay={[2000, 2000]} x={[-0.5, 0.5]} />
+              <Confetti cone delay={[2000, 2000]} amount="10" x={[-0.75, -0.4]} y={[0.15, 0.75]} />
+              <Confetti cone delay={[2000, 2000]} amount="10" x={[0.4, 0.75]} y={[0.15, 0.75]} />
+            </div>
+          {/each}
+        </div>
+      {/if}
       <div class="chibis">
         {#each Array(3) as _, i}
-           <ToggleConfetti>
-            <!--  -->
-            <button slot="label"><img src={chibi} alt="happy chibi" /></button>
-            <Confetti cone x={[-0.5, 0.5]} />
-            <Confetti cone amount="10" x={[-1, -0.4]} y={[0.25, 0.75]} />
-            <Confetti cone amount="10" x={[0.4, 1]} y={[0.25, 0.75]} />
-          </ToggleConfetti>
+          {#if bdToday}
+            <ToggleConfetti>
+              <!--  -->
+              <button style="all: unset" slot="label"
+                ><BoopAction boopParams={{ y: 15, timing: 800 }}>
+                  <img src={chibi} alt="happy chibi" /></BoopAction
+                ></button
+              >
+              <Confetti cone delay={[200, 500]} x={[-0.5, 0.5]} />
+              <Confetti cone delay={[200, 500]} amount="10" x={[-1, -0.4]} y={[0.25, 0.75]} />
+              <Confetti cone delay={[200, 500]} amount="10" x={[0.4, 1]} y={[0.25, 0.75]} />
+            </ToggleConfetti>
+          {:else}
+            <button style="all: unset"
+              ><BoopAction boopParams={{ y: -15, timing: 800 }}>
+                <img src={chibi} alt="happy chibi" /></BoopAction
+              ></button
+            >
+          {/if}
         {/each}
       </div>
     </div>
