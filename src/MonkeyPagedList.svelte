@@ -138,7 +138,6 @@
   }
 
   .main {
-    margin-top: 0.5em;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -161,7 +160,7 @@
       border: 3px solid #fff;
       border-radius: 0.4em;
       padding: 0.5em;
-      margin: 1em 0 0 0;
+      margin: 0.5em 0 0 0;
       width: 15em;
       height: 19.4em;
       justify-content: space-evenly;

@@ -46,7 +46,6 @@ button {
   border: 3px solid #fff;
   border-radius: 0.5em;
   padding: 0.3em 0.5em;
-  // margin-top: 1em;
   cursor: pointer;
 }
 // does not fully activate?
@@ -66,10 +65,10 @@ button:disabled:active {
   color: $ban-gray2;
 }
 
-button:hover {
+button:hover, .btn:hover {
   border-color: $ban-y;
 }
 
-button:active {
+button:active, .bt:active {
   color: $ban-y;
 }
