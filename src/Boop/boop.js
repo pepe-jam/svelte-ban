@@ -11,7 +11,7 @@ export default function boop(node, params) {
 	let { setter } = params;
 	let springyRotation = spring({ x: 0, y: 0, rotation: 0, scale: 1} , {
 		stiffness: 0.2,
-		damping: 0.6
+		damping: 0.4
 	});
 	let prefersReducedMotion = getPrefersReducedMotion();
 	
