@@ -72,7 +72,7 @@
         Your generated seed is<br /><span on:mousedown={copySeed}>{seed}</span>
       </div>
       {#if addresses.length !== 0}
-        <h4>and here some of the addresses that belong to it</h4>
+        <span>and here some of the addresses that belong to it</span>
         {#key currentPage}
           <MonkeyPagedList {seed} {addresses} />
         {/key}
@@ -116,10 +116,6 @@
     }
   }
 
-  h4 {
-    margin: 0.2em;
-  }
-
   @media (min-width: 420px) {
     .generator {
       font-size: 1.6em;
@@ -151,8 +147,8 @@
     .generator {
       font-size: 1.15em;
 
-      h4 {
-        font-size: 1.7em;
+      span {
+        font-size: 1.2em;
       }
 
       .seed {
