@@ -42,8 +42,8 @@
 
     input {
       font-size: 0.8em;
-      border-radius: 5px;
-      padding: 4px;
+      border-radius: 0.7em;
+      padding: 0.3em;
     }
 
     input:focus {
@@ -52,13 +52,6 @@
       border-color: $ban-y;
       outline: 5em;
       box-shadow: 1px 1px #4cbf4b;
-    }
-
-    .error {
-      font-size: 0.5em;
-      margin: 0.5em 0.2em;
-      height: 0.8em;
-      color: deeppink;
     }
   }
 

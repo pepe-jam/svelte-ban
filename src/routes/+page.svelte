@@ -5,10 +5,10 @@
 
   import bananoLogo from '@/assets/banano-icon.svg'
 
-  import MonkeyAccount from '../MonkeyAccount.svelte'
-  import AddressSearch from '../AddressSearch.svelte'
-  import MonkeyCard from '../MonkeyCard.svelte'
-  import TransactionHistory from '../TransactionHistory.svelte'
+  import MonkeyAccount from '@/components/MonkeyAccount.svelte'
+  import AddressSearch from '@/components/AddressSearch.svelte'
+  import MonkeyCard from '@/components/MonkeyCard.svelte'
+  import TransactionHistory from '@/components/TransactionHistory.svelte'
   
 
   let ready = false

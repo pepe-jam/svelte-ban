@@ -3,7 +3,7 @@
   import { fade } from 'svelte/transition'
   import { Main } from '@bananocoin/bananojs'
 
-  import MonkeyPagedList from '@/MonkeyPagedList.svelte'
+  import MonkeyPagedList from '@/components/MonkeyPagedList.svelte'
 
   let ready = false
   onMount(() => (ready = true))

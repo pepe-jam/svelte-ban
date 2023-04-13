@@ -5,7 +5,7 @@
   import { Confetti } from 'svelte-confetti'
 
   import BoopAction from '@/boop/BoopAction.svelte'
-  import ToggleConfetti from '@/ToggleConfetti.svelte'
+  import ToggleConfetti from '@/components/ToggleConfetti.svelte'
   import chibi from '@/assets/chibi.webp'
 
   let ready = false
@@ -86,10 +86,10 @@
           x={[-5, 5]}
           y={[0, 0.1]}
           delay={[1000, 2000]}
-          size="15"
+          size={15}
           infinite
-          duration="20000"
-          amount="123"
+          duration={20000}
+          amount={123}
           fallDistance="100vh"
         />
       </div>

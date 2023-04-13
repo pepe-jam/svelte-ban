@@ -222,6 +222,7 @@
     user-select: text !important;
     color: #fff;
     background: $ban-gray;
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
   }
