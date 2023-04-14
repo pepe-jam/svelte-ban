@@ -186,7 +186,7 @@
     }
 
     .banana {
-      background: url(assets/banano-gold.svg) center no-repeat;
+      background: url(../assets/banano-gold.svg) center no-repeat;
       width: 15em;
       height: 30em;
       display: flex;
