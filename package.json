@@ -24,7 +24,9 @@
     "@bananocoin/bananojs": "^2.7.13",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "bananojs": "^0.0.4",
+    "bignumber.js": "^9.1.1",
     "https-browserify": "^1.0.0",
+    "mongodb": "^5.3.0",
     "scss": "^0.2.4",
     "svelte-confetti": "^1.2.2",
     "svelte-qrcode-image": "^1.0.0-rc.2"
