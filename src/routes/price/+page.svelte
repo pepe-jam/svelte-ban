@@ -244,27 +244,6 @@
     background: #212529;
   }
 
-  button {
-    display: flex;
-    justify-content: center;
-    width: 11em;
-    font-size: 1em;
-    color: #fff;
-    background: #2a2a2e;
-    border: 0.15em solid #fff;
-    border-radius: 0.4rem;
-    padding: 0.5rem;
-    margin: 0.5em 0;
-    cursor: pointer;
-  }
-
-  button:disabled {
-    color: $ban-gray2;
-    background: $ban-gray;
-    border: 3px solid $ban-gray2;
-    filter: grayscale(80%);
-  }
-
   input:focus,
   select:focus {
     outline: 0.1em solid $ban-y;

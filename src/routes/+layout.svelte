@@ -10,13 +10,13 @@
     { title: 'Birthday', path: '/birthday' },
     { title: 'Seed', path: '/seed' },
     { title: 'Price', path: '/price' },
-    { title: 'Gallery', path: '/gallery' },
+    // { title: 'Gallery', path: '/gallery' },
   ]
 </script>
 
 <nav>
   {#each nav as item, i}
-    <a rel="external" href={item.path} class:active={$page.route.id === item.path} tabindex={i+1}>{item.title}</a>
+    <a rel="external" href={item.path} class:active={$page.route.id === item.path} tabindex={i + 1}>{item.title}</a>
   {/each}
 </nav>
 
@@ -28,8 +28,10 @@
       display: none !important;
     }
   }
-  
+
   nav {
+    display: flex;
+    gap: 0.3em;
     font-size: 1.4em;
     text-align: center;
     user-select: none;
@@ -49,7 +51,6 @@
     a {
       position: relative;
       text-decoration: none;
-      margin-right: 0.3em;
     }
 
     a::before {
