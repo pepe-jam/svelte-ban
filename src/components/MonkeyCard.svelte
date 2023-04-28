@@ -3,8 +3,8 @@
 
   import QrCodeImage from 'svelte-qrcode-image/QRCodeImage.svelte'
 
-  import gorilla from '@/assets/gorilla.png'
-  import banano_gold from '@/assets/banano-gold.svg'
+  import gorilla from '$/assets/gorilla.png'
+  import banano_gold from '$/assets/banano-gold.svg'
 
   export let account: string
   export let validAccount: Function

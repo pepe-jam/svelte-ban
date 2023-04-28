@@ -3,12 +3,12 @@
   import type { SvelteComponent } from 'svelte'
   import { BananoUtil } from '@bananocoin/bananojs'
 
-  import bananoLogo from '@/assets/banano-icon.svg'
+  import bananoLogo from '$/assets/banano-icon.svg'
 
-  import MonkeyAccount from '@/components/MonkeyAccount.svelte'
-  import AddressSearch from '@/components/AddressSearch.svelte'
-  import MonkeyCard from '@/components/MonkeyCard.svelte'
-  import TransactionHistory from '@/components/TransactionHistory.svelte'
+  import MonkeyAccount from '$/components/MonkeyAccount.svelte'
+  import AddressSearch from '$/components/AddressSearch.svelte'
+  import MonkeyCard from '$/components/MonkeyCard.svelte'
+  import TransactionHistory from '$/components/TransactionHistory.svelte'
   
 
   let ready = false

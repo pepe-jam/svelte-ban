@@ -4,9 +4,9 @@
 
   import { Confetti } from 'svelte-confetti'
 
-  import BoopAction from '@/boop/BoopAction.svelte'
-  import ToggleConfetti from '@/components/ToggleConfetti.svelte'
-  import chibi from '@/assets/chibi.webp'
+  import BoopAction from '$/Boop/BoopAction.svelte'
+  import ToggleConfetti from '$/components/ToggleConfetti.svelte'
+  import chibi from '$/assets/chibi_peepo.webp'
 
   let ready = false
   onMount(() => (ready = true))
