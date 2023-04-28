@@ -1,16 +1,17 @@
 <script lang="ts">
-  /** @type {import('./$types').PageData} */
-  export let pageData: PageData
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
   import { Main, BananoUtil, BananodeApi } from '@bananocoin/bananojs'
   import { sendBanano, receiveBanano, bananoDecimalToRaw } from './NodeRequests'
   // import { getAccountInfo } from '$/db/claims'
+ 
   import type { PageData } from './$types'
+  /** @type {import('./$types').PageData} */
+  export let data: PageData
 
   let ready = false
   onMount(() => {
-
+    
   })
 
   //  replace with process.env.seed
@@ -25,7 +26,7 @@
     return [start, end].join('...')
   }
 
-  $: validAccount = (account: string) => {
+  $: validAccount = (account: string ) => {
     if (account) account = account.trim()
     return BananoUtil.getBananoAccountValidationInfo(account).valid
   }
@@ -35,14 +36,21 @@
     // TODO TODO TODO
     checkEligibility(claimAccount)
     const amount = calcReward()
-    const blockHash = await sendBanano(claimAccount, amount)
-    console.log(blockHash)
+    //
+    // const blockHash = await sendBanano(claimAccount, amount)
+    // console.log(blockHash)
   }
 
-  async function checkEligibility(account: string) {
+  async function getIP() {
+		const response = await fetch('/api/faucet')
+		const ip = await response.json()
+    return ip
+	}
+
+  async function checkEligibility(account: string='') {
     // TODO if ('cookie') return false
     // const info = await getAccountInfo(account)
-    console.log(info)
+    // console.log(info)
     // if (getTimestamp(account))
   }
 
@@ -53,14 +61,9 @@
     return bananoDecimalToRaw(reward)
   }
 </script>
-<!-- 
-<section>
-  {#each pageData.claims as claim}
-    {claim}
-    <br>
-  {/each}
-</section> -->
-<!-- <h1>Your IP Address is {pageData.ip}</h1> -->
+
+
+<h1>Your IP Address is {data.ip}</h1>
 <div class="faucet">
   <div class="title">legendary banano faucet</div>
   <div class="spacer" />
@@ -81,6 +84,7 @@
   <button on:click={claimFaucet} disabled={!validAccount(claimAccount)}>claim bananos</button>
   <button on:click={receiveBanano}>receive bananos</button>
   <button>make custom captcha</button>
+
   <div class="account" transition:fade>
     <div>
       <div class="address">
