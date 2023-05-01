@@ -1,12 +1,7 @@
 import { json} from '@sveltejs/kit'
 
 export async function GET(request: Request) {
-    let ip
-    try {
-        ip = request.headers.get('x-forwarded-for')
-    } catch (e) {
-        console.error("User IP could not be extracted from 'x-forwarded-for' header")
-    }
+    let ip = request.headers?.get('x-forwarded-for')?.split(',')[0]
     if (!ip) ip = await getIP()
     return json(ip)
 }
