@@ -8,6 +8,7 @@ const config = {
     alias: {
       $: './src',
       $db: './src/db',
+      $assets: './src/assets',
     }
   },
 
