@@ -1,7 +1,24 @@
-// /** @type {import('./$types').PageLoad} */
-// export async function load({ fetch }) {
-//     const url = 'https://api.ipify.org?format=json'
-//     const result = await fetch(url)
-//     const ip = (await result.json()).ip
-//     return { ip: ip }
-// }
+import type { PageLoad } from './$types';
+import { PUBLIC_FAUCET_ADDRESS } from '$env/static/public'
+
+export const load = (async ({ fetch }) => {
+    const getIp = async () => {
+        const result = await fetch('/api/ip')
+        const ip = await result.json()
+        return {
+            ip: ip
+        }
+    }
+
+    const getFaucetAddress = () => {
+        return {
+            FAUCET_ADDRESS: PUBLIC_FAUCET_ADDRESS,
+        }
+    }
+
+    return {
+        ip: getIp(),
+        faucetAddress: getFaucetAddress()
+    }
+
+}) satisfies PageLoad
