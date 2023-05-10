@@ -42,8 +42,6 @@ type BlockInfo = {
 }
 
 const BANANODEAPIS = { 'Ptera': 'https://booster.dev-ptera.com/banano-rpc', 'Kalium': 'https://kaliumapi.appditto.com/api' }
-const FAUCET_SEED = '00A01A82FFE177A1D9ACD4DF3C3CBA770FE50FF33CAA83A256FC0A6D71C5C611'
-const FAUCET_ADDRESS = 'ban_36aauqwe6s3dibw9c3j1yxwxtz88bnxwjhjhao1tad3hjzyhgjf9urn1ctzw'
 
 const LOGGING = true
 
@@ -61,13 +59,13 @@ export function rawToBananoDecimal(raw: string) {
   return banano
 }
 
-function getPrivateKey() {
+function getPrivateKey(FAUCET_SEED: string) {
   return BananoUtil.getPrivateKey(FAUCET_SEED, 0)
 }
 
-export async function sendBanano(toAddress: string, amount: string) {
+export async function sendBanano(account: string, seed: string, toAddress: string, amount: string) {
   try {
-    const signedBlock = await createTransaction(toAddress, amount, 'send')
+    const signedBlock = await createTransaction(account, seed, toAddress, amount, 'send')
     const blockHash = await broadcastTransaction(signedBlock, 'send')
     return blockHash
   } catch (error) {
@@ -75,27 +73,25 @@ export async function sendBanano(toAddress: string, amount: string) {
   }
 }
 
-export async function receiveBanano() {
-  const account = FAUCET_ADDRESS
-
+export async function receiveBanano(account: string, seed: string) {
   let receivedBlocks: string[] = []
   const receiveableBlocks = await getReceivableBlocks(account)
   for (let i = 0; i < receiveableBlocks.length; i++) {
     const blockHash = receiveableBlocks[i]
-    receivedBlocks.push(await receiveBlock(blockHash))
+    receivedBlocks.push(await receiveBlock(account, seed, blockHash))
   }
   return receivedBlocks
 }
 
-async function createTransaction(link: string, amount: string, type: 'send' | 'receive') {
-  const account = await getAccountInfo(FAUCET_ADDRESS)
+async function createTransaction(account: string, seed: string, link: string, amount: string, type: 'send' | 'receive') {
+  const accountInfo = await getAccountInfo(account)
 
-  const representative = account.representative
+  const representative = accountInfo.representative
   let remaining = BigNumber('0')
   if (type === 'send') {
-    remaining = BigNumber(account.balance).minus(BigNumber(amount))
+    remaining = BigNumber(accountInfo.balance).minus(BigNumber(amount))
   } else {
-    remaining = BigNumber(account.balance).plus(BigNumber(amount))
+    remaining = BigNumber(accountInfo.balance).plus(BigNumber(amount))
   }
   const remainingDecimal = remaining.toString(10)
 
@@ -103,12 +99,12 @@ async function createTransaction(link: string, amount: string, type: 'send' | 'r
     action: 'block_create',
     json_block: 'true',
     type: 'state',
-    previous: account.frontier,
-    account: FAUCET_ADDRESS,
+    previous: accountInfo.frontier,
+    account: account,
     representative: representative,
     balance: remainingDecimal,
     link: link,
-    key: getPrivateKey()
+    key: getPrivateKey(seed)
   }
   return (await requestFromNode(request, BANANODEAPIS.Ptera)).block
 }
@@ -131,13 +127,13 @@ async function getReceivableBlocks(account: string): Promise<string[]> {
   return (await requestFromNode(request, BANANODEAPIS.Kalium)).blocks
 }
 
-async function receiveBlock(blockHash: string) {
+async function receiveBlock(account: string, seed: string, blockHash: string) {
   const blockInfo = await getBlockInfo(blockHash)
   const amount = blockInfo.amount
 
-  const signedBlock = await createTransaction(blockHash, amount, 'receive')
-  const ownBlockHash = await broadcastTransaction(signedBlock, 'receive')
-  return ownBlockHash
+  const signedBlock = await createTransaction(account, seed, blockHash, amount, 'receive')
+  const broadcastedBlockHash = await broadcastTransaction(signedBlock, 'receive')
+  return broadcastedBlockHash
 }
 
 async function getBlockInfo(blockHash: string): Promise<BlockInfo> {
@@ -157,9 +153,6 @@ export async function getWork(frontier: string) {
   return (await requestFromNode(request, BANANODEAPIS.Ptera)).work
 }
 
-export async function getFaucetBalance() {
-  return await getAccountBalance(FAUCET_ADDRESS)
-}
 
 export async function getAccountBalance(account: string) {
   const request = {
@@ -170,7 +163,7 @@ export async function getAccountBalance(account: string) {
   return Number(balance_decimal).toFixed(2)
 }
 
-export async function getAccountInfo(account: string): Promise<AccountInfo> {
+async function getAccountInfo(account: string): Promise<AccountInfo> {
   const request = {
     action: 'account_info',
     account: account,
@@ -179,8 +172,8 @@ export async function getAccountInfo(account: string): Promise<AccountInfo> {
   return await requestFromNode(request, BANANODEAPIS.Ptera)
 }
 
-async function faucetDry() {
-  const balance = Number(await getFaucetBalance())
+export async function faucetDry(account: string) {
+  const balance = Number(await getAccountBalance(account))
   return balance < 1
 }
 
@@ -190,11 +183,11 @@ export async function unopenedAccount(account: string) {
     account: account,
     count: 1
   }
-  return (await requestFromNode(request, BANANODEAPIS.Kalium)).history !== ''  
+  return (await requestFromNode(request, BANANODEAPIS.Kalium)).history !== ''
 }
 
 // TODO fill blacklist
-const blacklist: Array<string> = []
+const blacklist: Array<string> = ['ban_36aauqwe6s3dibw9c3j1yxwxtz88bnxwjhjhao1tad3hjzyhgjf9urn1ctzw']
 export async function relatedToBlacklist(account: string) {
   if (blacklist.includes(account)) return true
   const request = {
@@ -214,7 +207,7 @@ export async function relatedToBlacklist(account: string) {
   return false
 }
 
-export async function requestFromNode(request: object, apiUrl: string) {
+async function requestFromNode(request: object, apiUrl: string) {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
