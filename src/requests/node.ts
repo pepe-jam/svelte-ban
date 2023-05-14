@@ -1,5 +1,6 @@
-import { BananoUtil } from '@bananocoin/bananojs'
 import { BigNumber } from 'bignumber.js'
+import { getPrivateKey } from '$/tools/banano'
+
 
 type AccountInfo = {
   frontier: string
@@ -57,10 +58,6 @@ export function rawToBananoDecimal(raw: string) {
   const _raw = BigNumber(raw)
   const banano = _raw.times(bananoFactor).toString(10)
   return banano
-}
-
-function getPrivateKey(FAUCET_SEED: string) {
-  return BananoUtil.getPrivateKey(FAUCET_SEED, 0)
 }
 
 export async function sendBanano(account: string, seed: string, toAddress: string, amount: string) {
