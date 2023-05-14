@@ -6,20 +6,16 @@
 
   import type { PageData, PageServerData } from './$types'
   export let data: PageData
-  export let serverData: PageServerData
-
-  import LogoGradient from './LogoGradient.svelte'
 
   onMount(() => {
     console.log(data)
-    console.log(serverData)
   })
 
 
-  let faucetBalancePromise: Promise<string> | undefined = undefined //getFaucetBalance() from NodeRequests now
+  let faucetBalancePromise: Promise<string> | undefined = undefined //getFaucetBalance() from $requests/node now
   let claimAccount: string = ''
 
-  function shortAddress(address: string) {
+  function shortenAddress(address: string) {
     const start = address.slice(0, 12)
     const end = address.slice(-6, 64)
     return [start, end].join('...')
@@ -27,7 +23,7 @@
 
   $: validAccount = (account: string) => {
     if (account) account = account.trim()
-    return BananoUtil.getBananoAccountValidationInfo(account).valid
+    return BananoUtil.getBananoAccountValidationInfo(account).valid       //TODO fettes
   }
 
   async function claim() {
@@ -47,7 +43,6 @@
   }
 </script>
 
-<!-- <LogoGradient/> -->
 <h1>Your IP Address is {data.ip}</h1>
 <div class="faucet">
   <div class="title">legendary banano faucet</div>
@@ -71,11 +66,12 @@
   <button on:click={claim} disabled={!validAccount(claimAccount)}>claim bananos</button>
   <button on:click={receiveBanano}>receive bananos</button>
   <button>make custom captcha</button>
-
+  <button on:click={getPrivateKey}>private key</button>
+  
   <div class="account" transition:fade>
     <div>
       <div class="address">
-        {shortAddress(data.faucetAd???dress)} // + add error stuff in api from svelte https://icflorescu.github.io/trpc-sveltekit/authentication
+        {shortenAddress(data.faucetAddress)}
       </div>
       <div class="balance">
         {#await faucetBalancePromise}

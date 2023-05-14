@@ -1,0 +1,5 @@
+switch awaits to .thens?
+or rather only return promises where i want errors rendered in case they appear (ip?)
+finish mock db
+uncomment db if you wanna use it: hooks, faucet/server, faucet/page, db/mongo, db/claims
+nochmal bananojs installieren und fïr faucet page validAccount in tools auch packen
