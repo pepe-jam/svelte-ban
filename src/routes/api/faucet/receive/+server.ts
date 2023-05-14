@@ -1,9 +1,8 @@
 import { json} from '@sveltejs/kit'
 import { FAUCET_SEED } from '$env/static/private'
 import { PUBLIC_FAUCET_ADDRESS } from '$env/static/public'
-import { sendBanano, receiveBanano, getAccountBalance } from '../../../faucet/NodeRequests'
+import { sendBanano, receiveBanano, getAccountBalance } from '$/requests/node'
 
-//////////// ^needs new location TODO
 // use svelte error
 
 export async function GET(request: Request) {

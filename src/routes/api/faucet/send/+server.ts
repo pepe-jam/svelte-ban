@@ -3,10 +3,7 @@ import { getClaimInfo, updateAccount } from '$/db/claims'
 import { BananoUtil } from '@bananocoin/bananojs'
 import { FAUCET_SEED } from '$env/static/private'
 import { PUBLIC_FAUCET_ADDRESS, PUBLIC_CLAIM_COOLDOWN } from '$env/static/public'
-
-import { sendBanano, bananoDecimalToRaw, relatedToBlacklist } from '../../../faucet/NodeRequests'
-
-//////////// ^needs new location TODO
+import { sendBanano, bananoDecimalToRaw, relatedToBlacklist } from '$/requests/node'
 
 type ClaimTicket = {
     account?: string,
