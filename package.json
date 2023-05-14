@@ -21,6 +21,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@bananocoin/bananojs": "^2.8.8",
     "@vitejs/plugin-basic-ssl": "^1.0.1",
     "bananojs": "^0.0.4",
     "bignumber.js": "^9.1.1",
