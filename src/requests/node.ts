@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { getPrivateKey } from '$/tools/banano'
+import { BananoUtil } from '@bananocoin/bananojs'
 
 
 type AccountInfo = {
@@ -101,7 +101,7 @@ async function createTransaction(account: string, seed: string, link: string, am
     representative: representative,
     balance: remainingDecimal,
     link: link,
-    key: getPrivateKey(seed)
+    key: BananoUtil.getPrivateKey(seed, 0)
   }
   return (await requestFromNode(request, BANANODEAPIS.Ptera)).block
 }

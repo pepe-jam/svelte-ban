@@ -23,7 +23,7 @@
 
   $: validAccount = (account: string) => {
     if (account) account = account.trim()
-    return BananoUtil.getBananoAccountValidationInfo(account).valid       //TODO fettes
+    return BananoUtil.getBananoAccountValidationInfo(account).valid
   }
 
   async function claim() {
