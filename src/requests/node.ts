@@ -150,7 +150,6 @@ export async function getWork(frontier: string) {
   return (await requestFromNode(request, BANANODEAPIS.Ptera)).work
 }
 
-
 export async function getAccountBalance(account: string) {
   const request = {
     action: 'account_balance',
@@ -216,9 +215,9 @@ async function requestFromNode(request: object, apiUrl: string) {
     const result = await response.json()
 
     if (LOGGING) {
-      console.log('REQUEST')
+      console.log('<REQUEST>')
       console.log(JSON.stringify(request))
-      console.log('RESULT')
+      console.log('<RESULT>')
       console.log(JSON.stringify(result))
     }
 

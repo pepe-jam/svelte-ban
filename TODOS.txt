@@ -1,5 +1,6 @@
-switch awaits to .thens?
+object with error or message on return for api
+displaying error in faucet page
 or rather only return promises where i want errors rendered in case they appear (ip?)
 finish mock db
 uncomment db if you wanna use it: hooks, faucet/server, faucet/page, db/mongo, db/claims
-nochmal bananojs installieren und fïr faucet page validAccount in tools auch packen
+fill blacklist
