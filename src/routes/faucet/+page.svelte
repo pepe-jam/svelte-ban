@@ -11,7 +11,6 @@
     console.log(data)
   })
 
-
   let faucetBalancePromise: Promise<string> | undefined = undefined //getFaucetBalance() from $requests/node now
   let claimAccount: string = ''
 
@@ -29,17 +28,32 @@
   async function claim() {
     if (!validAccount(claimAccount)) return
     console.log(claimAccount + ' claiming the faucet')
-    const result = await fetch(`/api/send?address=${claimAccount}`)
-    const block = await result.json()
-    console.log('block', block)
-    return block
+    try {
+      const headers = new Headers()
+      headers.append('Cookie', `ct=${data.ct}`)
+      const result = await fetch(`/api/faucet/send?address=${claimAccount}`, {
+        method: 'GET',
+        headers: headers,
+        credentials: 'include',
+      })
+
+      const block = await result.json()
+      console.log('block', block)
+      return block
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async function receiveBanano() {
-    const result = await fetch('/api/faucet/receive')
-    const receivedBlocks = await result.json()
-    console.log('receivedBlocks', receivedBlocks)
-    return receivedBlocks
+    try {
+      const result = await fetch('/api/faucet/receive')
+      const receivedBlocks = await result.json()
+      console.log('receivedBlocks', receivedBlocks)
+      return receivedBlocks
+    } catch (error) {
+      console.error(error)
+    }
   }
 </script>
 
@@ -65,9 +79,9 @@
   {/if}
   <button on:click={claim} disabled={!validAccount(claimAccount)}>claim bananos</button>
   <button on:click={receiveBanano}>receive bananos</button>
-  <button>make custom captcha</button>
-  <button on:click={getPrivateKey}>private key</button>
-  
+  <button>(make custom captcha)</button>
+  <button>(generate own work?)</button>
+
   <div class="account" transition:fade>
     <div>
       <div class="address">

@@ -1,5 +1,5 @@
 import { error, json } from '@sveltejs/kit'
-import { getClaimInfo, updateAccount } from '$/db/claims'
+// import { getClaimInfo, updateAccount } from '$/db/claims'
 import { BananoUtil } from '@bananocoin/bananojs'
 import { FAUCET_SEED } from '$env/static/private'
 import { PUBLIC_FAUCET_ADDRESS, PUBLIC_CLAIM_COOLDOWN } from '$env/static/public'
@@ -15,31 +15,24 @@ type ClaimTicket = {
 ///// after captcha hash acc + captcha something and have timelimit in which this ticket can be claimed? 
 // use svelte error
 
-export async function GET(request: Request): Promise<Response> {
+export async function GET(request): Promise<Response> {
     const params = new URL(request.url).searchParams
 
-    // const cookies = cookie.parse(request.headers.cookie || '')
-    // cookies.set('ct', Date.now(), {
-    //     path: '/',
-    //     httpOnly: true,
-    //     sameSite: 'strict',
-    //     secure: !dev,
-    //     maxAge: 60 * 60 * 24 * 30
-    // });
-    // console.log(request.headers.cookie)
     const account = params.get('address')!
-    const ticket = await checkTicket(account)
+    const ct = Number(request.cookies.get('ct')) || 0
+    const ticket = await checkTicket(account, ct)
     if (!ticket.valid) return json(ticket.error)
     // const block = await sendBanano(PUBLIC_FAUCET_ADDRESS, FAUCET_SEED, ticket.account, ticket.amount)
-    // write new cookie
-    //
-    await updateAccount(account)
-    return json(ticket)
-    // return json(block)
+    // set the new cookie to header
+    // let response = json(block)
+    let response = json(ticket)
+    response.headers.append('set-cookie', `ct=${encodeURIComponent(Date.now())}; Path=/; Max-Age=${PUBLIC_CLAIM_COOLDOWN}; Secure; SameSite=Strict`)
+    // update account in db
+    // await updateAccount(account)
+    return response
 }
 
-async function checkTicket(account: string | null): Promise<ClaimTicket> {
-    console.log('account:', account)
+async function checkTicket(account: string | null, ct: number): Promise<ClaimTicket> {
     // check if banano address given
     if (!account) {
         return finishTicket('', 'no banano address was given')
@@ -55,16 +48,20 @@ async function checkTicket(account: string | null): Promise<ClaimTicket> {
     // }
     //
     // check the users' cookie
+    if (Number(ct) + Number(PUBLIC_CLAIM_COOLDOWN) > Date.now()) {
+        const remaining = getRemaining(ct)
+        console.log(remaining)
+        return finishTicket(account, `claim not yet available, ${remaining} remaining`)
+    }
     //
     // check db timestamp
-    const claim = await getClaimInfo(account)
-    if (claim?.timestamp) {
-        const remaining = (claim?.timestamp + Number(PUBLIC_CLAIM_COOLDOWN)) - Date.now()
-        if (remaining > 0) {
-            return finishTicket(account, `claim not yet available, ${toReadable(remaining)} left`)
-        }
-    }
-    // console.log(info)
+    // const claim = await getClaimInfo(account)
+    // if (claim?.timestamp) {
+    //     const remaining = calcRemaining(claim.timestamp)
+    //     if (remaining > 0) {
+    //         return finishTicket(account, `claim not yet available, ${toReadable(remaining)} remaining`)
+    //     }
+    // }
     return finishTicket(account)
 }
 
@@ -72,25 +69,28 @@ function finishTicket(account: string, error?: string): ClaimTicket {
     error = error ? 'error: ' + error : error
     return {
         account: account,
-        amount: account ? calcAmount(account) : '0',
+        amount: account ? getClaimAmount(account) : '0',
         valid: !error,
         error: error,
     }
 }
 
-function calcAmount(account: string): string {
+function getClaimAmount(account: string): string {
     // check if account unopened
     // check other stuff
     let reward = (0.019).toString()
     return bananoDecimalToRaw(reward)
 }
 
-function toReadable(ms: number): string {
-    return new Date(ms).toLocaleTimeString('de-DE')
+function getRemaining(timestamp: number): string {
+    const nextClaim = timestamp + Number(PUBLIC_CLAIM_COOLDOWN)
+    const remaining = nextClaim - Date.now()
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60))
+    const seconds = Math.floor((remaining % (1000 * 60)) / 1000)
+    return `Remaining time: ${hours}:${minutes}:${seconds}`
 }
 
-//set
-// res.cookie('ban_time', String(Date.now()), {maxAge: 86400, sameSite: true});
-// check
-// if (req.cookies['ban_time']) {
-//     if (Number(req.cookies['ban_time']) + claim_freq > Date.now()) {
+function toReadable(ms: number): string {
+    return new Date(Date.now() + ms).toLocaleTimeString('de-DE')
+}

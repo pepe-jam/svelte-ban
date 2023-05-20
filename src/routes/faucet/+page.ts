@@ -1,7 +1,7 @@
 import type { PageLoad } from './$types';
 import { PUBLIC_FAUCET_ADDRESS } from '$env/static/public'
 
-export const load = (async ({ fetch, data}) => {
+export const load = (async ({ fetch, data }) => {
     const getIp = async () => {
         const result = await fetch('/api/ip')
         const ip = await result.json()
@@ -15,9 +15,6 @@ export const load = (async ({ fetch, data}) => {
     return {
         ip: await getIp(),
         faucetAddress: getFaucetAddress(),
-        // someClaims: data.someClaims,
-        // lastClaimTime: data.lastClaimTime,
-        // setClaimTime: data.setClaimTime,
+        ct: data.ct,
     }
-
 }) satisfies PageLoad
