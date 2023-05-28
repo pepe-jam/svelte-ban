@@ -7,6 +7,8 @@ export async function GET(request: Request) {
 }
 
 async function getIP() {
+    return '1337.1337.1337.1337'
+
     const url = 'https://api.ipify.org?format=json'
     try {
         const response = await fetch(url)
