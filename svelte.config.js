@@ -10,6 +10,7 @@ const config = {
       db: './src/db',
       requests: './src/requests',
       assets: './src/assets',
+      components: './src/components',
       api: './src/routes/api',
     }
   },
