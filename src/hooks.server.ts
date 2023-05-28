@@ -1,4 +1,4 @@
-// import { startMongo } from '$/db/mongo'
+// import { startMongo } from 'db/mongo'
 
 // startMongo().then((): void => {
 //     console.log('mongo started')

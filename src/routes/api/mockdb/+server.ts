@@ -11,7 +11,6 @@ let claims: Claim[] = [
     { account: 'ban_36aauqwe6s3dibw9c3j1yxwxtz88bnxwjhjhao1tad3hjzyhgjf9urn1ctzw', timestamp: 1683367108069, amount: 8 },
 ]
 
-
 export async function GET(request: Request) {
     function updateAccount(account: string) {
         claims = claims.map((claim) => {

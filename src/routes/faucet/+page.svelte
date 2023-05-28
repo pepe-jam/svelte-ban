@@ -2,16 +2,19 @@
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
   import { BananoUtil } from '@bananocoin/bananojs'
-  // import { getAccountInfo } from '$/db/claims'
+  import { getAccountBalance } from 'requests/node'
 
   import type { PageData, PageServerData } from './$types'
+  import type { Ticket } from 'api/faucet/send/+server'
+
   export let data: PageData
 
   onMount(() => {
     console.log(data)
   })
 
-  let faucetBalancePromise: Promise<string> | undefined = undefined //getFaucetBalance() from $requests/node now
+  let faucetBalancePromise: Promise<string> | undefined = undefined //getAccountBalance(data.faucetAddress)
+  let ticketPromise: Promise<Ticket> | undefined
   let claimAccount: string = ''
 
   function shortenAddress(address: string) {
@@ -26,7 +29,6 @@
   }
 
   async function claim() {
-    if (!validAccount(claimAccount)) return
     console.log(claimAccount + ' claiming the faucet')
     try {
       const headers = new Headers()
@@ -36,13 +38,15 @@
         headers: headers,
         credentials: 'include',
       })
-
-      const block = await result.json()
-      console.log('block', block)
-      return block
+      ticketPromise = result.json()
     } catch (error) {
       console.error(error)
     }
+
+    return ////////////////////////////////////////////////
+    const ticket = await result.json()
+    console.log('ticket', ticket)
+    return ticket
   }
 
   async function receiveBanano() {
@@ -78,6 +82,29 @@
     <div class="error" />
   {/if}
   <button on:click={claim} disabled={!validAccount(claimAccount)}>claim bananos</button>
+  <div class="error" />
+  {#if ticketPromise}
+    <div class="message">
+      {#await ticketPromise}
+        <p style="color: #FBDD11">...claiming BANs</p>
+      {:then ticket}
+        {#if ticket.error}
+          <p style="color: #FBDD11">{ticket.message}</p>
+        {:else}
+          <div style="color: #FBDD11">You claimed {ticket.amount} BAN!</div>
+          <div>
+            Have a look at the <a href="https://creeper.banano.cc/hash/{ticket.message}"
+              ><span style="color: #FBDD11">block</span></a
+            >
+          </div>
+        {/if}
+      {:catch error}
+        <p class="error">{error.message}</p>
+      {/await}
+    </div>
+  {/if}
+  <div class="error" />
+
   <button on:click={receiveBanano}>receive bananos</button>
   <button>(make custom captcha)</button>
   <button>(generate own work?)</button>

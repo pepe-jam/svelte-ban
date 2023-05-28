@@ -1,4 +1,4 @@
-// import { claims } from '$/db/claims'
+// import { claims } from 'db/claims'
 import type { PageServerLoad } from './$types'
 
 export const load = (async ({ cookies }) => {

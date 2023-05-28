@@ -7,9 +7,10 @@ const config = {
     adapter: adapter(),
     alias: {
       $: './src',
-      $db: './src/db',
-      $requests: './src/requests',
-      $assets: './src/assets',
+      db: './src/db',
+      requests: './src/requests',
+      assets: './src/assets',
+      api: './src/routes/api',
     }
   },
 

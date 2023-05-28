@@ -1,12 +1,11 @@
 <script lang="ts">
   import { fly } from 'svelte/transition'
   import { onMount } from 'svelte'
-
   import { Confetti } from 'svelte-confetti'
 
   import BoopAction from '$/Boop/BoopAction.svelte'
-  import ToggleConfetti from '$/components/ToggleConfetti.svelte'
-  import chibi from '$/assets/chibi_peepo.webp'
+  import ToggleConfetti from 'components/ToggleConfetti.svelte'
+  import chibi from 'assets/chibi_peepo.webp'
 
   let ready = false
   onMount(() => (ready = true))

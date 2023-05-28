@@ -1,9 +1,7 @@
 import { json} from '@sveltejs/kit'
 import { FAUCET_SEED } from '$env/static/private'
 import { PUBLIC_FAUCET_ADDRESS } from '$env/static/public'
-import { receiveBanano } from '$/requests/node'
-
-// use svelte error
+import { receiveBanano } from 'requests/node'
 
 export async function GET(request: Request) {
     try {
